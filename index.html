@@ -1372,10 +1372,9 @@
       id="login-input"
       type="password"
       placeholder="••••••••"
-      onkeydown="if(event.key==='Enter') doLogin()"
       autocomplete="current-password"
     />
-    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <button class="login-btn" id="login-btn">Sign In</button>
     <div class="login-error" id="login-error"></div>
     <div class="login-footer">Zendt Payments · Internal use only</div>
   </div>
@@ -2446,6 +2445,12 @@ window.exportCSV = exportCSV;
 window.quickStatus = quickStatus;
 window.saveApiKey = saveApiKey;
 window.doLogin = doLogin;
+
+// Wire up login button via JS (module scope requires this)
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('login-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 init();
