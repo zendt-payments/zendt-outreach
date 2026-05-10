@@ -2339,17 +2339,23 @@ function renderProfileOutput(text) {
 
   const alreadyExists = name && leads.some(l => l.name.toLowerCase() === name.toLowerCase());
 
-  const addBtnHtml = isGoodFit && name ? `
-    <button class="add-lead-banner ${alreadyExists ? 'already' : ''}" data-action="${alreadyExists ? '' : 'addLead'}">
-      ${alreadyExists
-        ? `<span>&#10003; ${name} is already in your leads</span>`
-        : `<span>&#43; Add <strong>${name}</strong> as a lead</span><span class="fit-tag fit-${fitKey}" style="margin-left:8px">${fit}</span>`
-      }
-    </button>` : '';
+  // AUTO-ADD immediately if good fit
+  if (isGoodFit && name && !alreadyExists) {
+    addLeadFromProfile();
+  }
+
+  const bannerHtml = isGoodFit && name ? `
+    <div class="add-lead-banner already" style="cursor:default">
+      <span>&#10003; ${alreadyExists ? name + ' already in leads' : name + ' added to leads'}</span>
+      <span class="fit-tag fit-${fitKey}" style="margin-left:8px">${fit}</span>
+    </div>` : (name ? `
+    <div class="add-lead-banner already" style="cursor:default;opacity:0.5">
+      <span>Not a fit — not added to leads</span>
+    </div>` : '');
 
   const out = document.getElementById('ai-output');
   out.innerHTML = `
-    ${addBtnHtml}
+    ${bannerHtml}
 
     <div class="out-block">
       <div class="out-block-header">
