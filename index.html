@@ -1258,13 +1258,13 @@
     <div class="nav-tab" onclick="switchView('ai')">AI Assistant</div>
   </div>
   <div class="api-status">
-    <div class="api-dot" id="api-dot"></div>
-    <span id="api-status-text">NO API KEY</span>
+    <div class="api-dot connected" id="api-dot"></div>
+    <span id="api-status-text">CONNECTED</span>
   </div>
 </nav>
 
-<!-- SETUP BAR -->
-<div class="setup-bar" id="setup-bar">
+<!-- SETUP BAR hidden - key is server-side -->
+<div class="setup-bar" id="setup-bar" style="display:none">
   <span>⚠ API key required for AI features</span>
   <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
   <button onclick="saveApiKey()">Connect</button>
@@ -2032,10 +2032,6 @@ function populateLeadSelect() {
 }
 
 async function runAI() {
-  if (!apiKey) {
-    alert('Please connect your Anthropic API key first.');
-    return;
-  }
   const input = document.getElementById('ai-input').value.trim();
   if (!input) return;
 
@@ -2051,12 +2047,10 @@ async function runAI() {
       ? 'Here is the LinkedIn profile:\n\n' + input
       : 'Here is the LinkedIn conversation:\n\n' + input;
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/claude', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
