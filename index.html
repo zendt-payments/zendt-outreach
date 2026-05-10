@@ -10,24 +10,24 @@
     --bg:        #0f1117;
     --surface:   #161b27;
     --surface2:  #1d2436;
-    --surface3:  #232a3e;
-    --border:    #262d42;
-    --border2:   #2f3850;
+    --surface3:  #252d42;
+    --border:    #2a3450;
+    --border2:   #364060;
     --accent:    #4f8ef7;
-    --accent-dim: rgba(79,142,247,0.12);
-    --accent-glow: rgba(79,142,247,0.06);
+    --accent-dim: rgba(79,142,247,0.15);
+    --accent-glow: rgba(79,142,247,0.08);
     --green:     #34d399;
-    --green-dim: rgba(52,211,153,0.12);
+    --green-dim: rgba(52,211,153,0.15);
     --amber:     #fbbf24;
-    --amber-dim: rgba(251,191,36,0.1);
+    --amber-dim: rgba(251,191,36,0.12);
     --red:       #f87171;
     --violet:    #a78bfa;
-    --violet-dim: rgba(167,139,250,0.12);
+    --violet-dim: rgba(167,139,250,0.15);
     --blue:       #4f8ef7;
-    --blue-dim:   rgba(79,142,247,0.12);
+    --blue-dim:   rgba(79,142,247,0.15);
     --text:      #f1f5f9;
-    --text2:     #94a3b8;
-    --text3:     #4b5675;
+    --text2:     #b0bcd4;
+    --text3:     #6b7fa3;
     --mono:      'JetBrains Mono', monospace;
     --sans:      'Plus Jakarta Sans', sans-serif;
     --radius:    10px;
@@ -306,7 +306,7 @@
   .pipe-count {
     font-family: var(--mono);
     font-size: 10px;
-    color: var(--text3);
+    color: var(--text2);
     background: var(--surface3);
     padding: 1px 7px;
     border-radius: 20px;
@@ -723,7 +723,7 @@
     padding: 14px;
     font-size: 13px;
     line-height: 1.75;
-    color: var(--text2);
+    color: var(--text);
     white-space: pre-wrap;
     font-family: var(--mono);
   }
@@ -939,7 +939,7 @@
     color: var(--text3);
     text-transform: uppercase;
     margin-bottom: 8px;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .detail-notes {
@@ -948,7 +948,7 @@
     border-radius: var(--radius-sm);
     padding: 10px 12px;
     font-size: 12px;
-    color: var(--text2);
+    color: var(--text);
     line-height: 1.7;
     font-family: var(--mono);
     min-height: 80px;
@@ -970,12 +970,12 @@
     font-weight: 500;
     cursor: pointer;
     border: 1px solid var(--border);
-    color: var(--text3);
+    color: var(--text2);
     transition: all 0.12s;
   }
 
-  .status-option:hover { border-color: var(--border2); color: var(--text2); background: var(--surface2); }
-  .status-option.sel { border-color: rgba(79,142,247,0.4); color: var(--accent); background: var(--accent-dim); }
+  .status-option:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .status-option.sel { border-color: rgba(79,142,247,0.5); color: var(--accent); background: var(--accent-dim); }
 
   /* ── SAVE NOTES BTN ── */
   .save-notes-btn {
@@ -1062,7 +1062,7 @@
 
   .last-contact-label {
     font-size: 12px;
-    color: var(--text2);
+    color: var(--text);
     font-weight: 500;
   }
 
@@ -1105,12 +1105,12 @@
     font-weight: 500;
     cursor: pointer;
     border: 1px solid var(--border);
-    color: var(--text3);
+    color: var(--text2);
     transition: all 0.12s;
   }
 
-  .stage-opt:hover { border-color: var(--border2); color: var(--text2); background: var(--surface2); }
-  .stage-opt.sel { border-color: rgba(79,142,247,0.4); color: var(--accent); background: var(--accent-dim); }
+  .stage-opt:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .stage-opt.sel { border-color: rgba(79,142,247,0.5); color: var(--accent); background: var(--accent-dim); }
 
   /* ── MESSAGE LOG ── */
   .msg-log { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
@@ -1137,7 +1137,7 @@
     font-size: 8px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .msg-entry-date {
@@ -1148,7 +1148,7 @@
 
   .msg-entry-text {
     font-size: 12px;
-    color: var(--text2);
+    color: var(--text);
     line-height: 1.65;
     white-space: pre-wrap;
   }
@@ -1232,24 +1232,161 @@
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-  /* ── FIT DISPLAY ── */
-  .fit-display {
-    display: inline-flex;
+  /* ── LOGIN SCREEN ── */
+  .login-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 1000;
+    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 12px;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 40px 36px;
+    width: 380px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .login-logo {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, #4f8ef7 0%, #7c3aed 100%);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 24px rgba(79,142,247,0.35);
+  }
+
+  .login-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
     margin-bottom: 4px;
+  }
+
+  .login-sub {
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 32px;
+  }
+
+  .login-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+    align-self: flex-start;
+    width: 100%;
+  }
+
+  .login-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.2em;
+    transition: all 0.15s;
+    margin-bottom: 14px;
+  }
+
+  .login-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,247,0.15);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 2px 10px rgba(79,142,247,0.35);
+    letter-spacing: 0.01em;
+  }
+
+  .login-btn:hover {
+    background: #3d7ef5;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.45);
+    transform: translateY(-1px);
+  }
+
+  .login-error {
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 500;
+    margin-top: 10px;
+    min-height: 18px;
+    text-align: center;
+  }
+
+  .login-footer {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 24px;
+    text-align: center;
+    line-height: 1.6;
   }
 </style>
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="logo.png" alt="Zendt" style="width:32px;height:32px;object-fit:contain;filter:invert(1)" />
+    </div>
+    <div class="login-title">Zendt Outreach</div>
+    <div class="login-sub">Internal sales tool</div>
+    <div class="login-label">Passphrase</div>
+    <input
+      class="login-input"
+      id="login-input"
+      type="password"
+      placeholder="••••••••"
+      onkeydown="if(event.key==='Enter') doLogin()"
+      autocomplete="current-password"
+    />
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-footer">Zendt Payments · Internal use only</div>
+  </div>
+</div>
+
 <!-- TOP NAV -->
 <nav class="topnav">
   <div class="logo">
-    <div class="logo-icon">Z</div>
+    <div class="logo-icon">
+      <img src="logo.png" alt="Zendt" style="width:18px;height:18px;object-fit:contain;filter:invert(1)" />
+    </div>
     Zendt
     <span class="logo-sub">/ Outreach</span>
   </div>
@@ -1525,9 +1662,25 @@
 </div>
 
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCHnVkpFYCJmEJiQ2Oq-gD3DFZj8qIqOxw",
+  authDomain: "zendt-outreach.firebaseapp.com",
+  projectId: "zendt-outreach",
+  storageBucket: "zendt-outreach.firebasestorage.app",
+  messagingSenderId: "484106125745",
+  appId: "1:484106125745:web:a3aaf7b8168c5a39e3bd90"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const leadsCol = collection(db, 'leads');
+
 // ─── STATE ───────────────────────────────────────────────────────────────────
-let leads = JSON.parse(localStorage.getItem('zendt_leads') || '[]');
+let leads = [];
 let apiKey = localStorage.getItem('zendt_api_key') || '';
 let currentFilter = 'all';
 let currentMode = 'profile';
@@ -1604,13 +1757,59 @@ STATUS: [One line: which stage, what the goal of this reply is]
 STAGE: [1, 2, 3, 4, or 5]
 REPLY: [Ready to copy-paste message, no quotes]`;
 
+// ─── AUTH ──────────────────────────────────────────────────────────────────────
+const PASSPHRASE = 'zendt2026';  // ← change this to whatever you want
+const SESSION_KEY = 'zendt_auth';
+
+function doLogin() {
+  const input = document.getElementById('login-input').value;
+  const errEl = document.getElementById('login-error');
+  if (input === PASSPHRASE) {
+    localStorage.setItem(SESSION_KEY, 'true');
+    document.getElementById('login-overlay').style.display = 'none';
+    errEl.textContent = '';
+  } else {
+    errEl.textContent = 'Incorrect passphrase. Try again.';
+    document.getElementById('login-input').value = '';
+    document.getElementById('login-input').focus();
+    // Shake animation
+    const box = document.querySelector('.login-box');
+    box.style.transition = 'transform 0.1s';
+    box.style.transform = 'translateX(-6px)';
+    setTimeout(() => box.style.transform = 'translateX(6px)', 100);
+    setTimeout(() => box.style.transform = 'translateX(-4px)', 200);
+    setTimeout(() => box.style.transform = 'translateX(0)', 300);
+  }
+}
+
+function checkAuth() {
+  if (localStorage.getItem(SESSION_KEY) === 'true') {
+    document.getElementById('login-overlay').style.display = 'none';
+  } else {
+    document.getElementById('login-overlay').style.display = 'flex';
+    setTimeout(() => document.getElementById('login-input').focus(), 100);
+  }
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
+  checkAuth();
   updateApiStatus();
-  renderLeads();
-  updateStats();
-  renderPipeline();
-  populateLeadSelect();
+
+  // Real-time Firestore listener — updates all clients instantly
+  onSnapshot(leadsCol, (snapshot) => {
+    leads = snapshot.docs.map(d => d.data());
+    leads.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    renderLeads();
+    updateStats();
+    renderPipeline();
+    populateLeadSelect();
+    // Refresh detail panel if open
+    if (activeLeadId) {
+      const lead = leads.find(l => l.id === activeLeadId);
+      if (lead) renderMsgLog(lead);
+    }
+  });
 }
 
 // ─── API KEY ─────────────────────────────────────────────────────────────────
@@ -1642,11 +1841,30 @@ function switchView(v) {
   document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&v==='leads')||(i===1&&v==='ai')));
   document.getElementById('view-leads').classList.toggle('active', v==='leads');
   document.getElementById('view-ai').classList.toggle('active', v==='ai');
+  // ai-view is inside view-ai but has its own display logic
+  const aiView = document.getElementById('view-ai');
+  if (aiView) aiView.style.display = v==='ai' ? 'flex' : 'none';
+  // close detail panel when switching views
+  if (v === 'leads') closeDetail();
 }
 
 // ─── LEADS ────────────────────────────────────────────────────────────────────
+// ─── FIRESTORE ────────────────────────────────────────────────────────────────
+async function saveLead_db(lead) {
+  try {
+    await setDoc(doc(db, 'leads', lead.id), lead);
+  } catch(e) { console.error('Save error:', e); }
+}
+
+async function deleteLead_db(id) {
+  try {
+    await deleteDoc(doc(db, 'leads', id));
+  } catch(e) { console.error('Delete error:', e); }
+}
+
 function saveleadsToStorage() {
-  localStorage.setItem('zendt_leads', JSON.stringify(leads));
+  // no-op: Firestore is the source of truth
+  // individual save functions handle persistence
 }
 
 function getFilteredLeads() {
@@ -1738,6 +1956,7 @@ function relativeDate(ts) {
 }
 
 function filterLeads(f) {
+  switchView('leads');
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('filter-' + f);
@@ -1759,7 +1978,7 @@ function closeAddModal() {
   ['f-name','f-location','f-role','f-url','f-notes'].forEach(id => document.getElementById(id).value = '');
 }
 
-function saveLead() {
+async function saveLead() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { alert('Name is required'); return; }
   const lead = {
@@ -1776,12 +1995,7 @@ function saveLead() {
     messages: [],
     createdAt: Date.now()
   };
-  leads.unshift(lead);
-  saveleadsToStorage();
-  renderLeads();
-  updateStats();
-  renderPipeline();
-  populateLeadSelect();
+  await saveLead_db(lead);
   closeAddModal();
 }
 
@@ -1852,48 +2066,39 @@ function closeDetail() {
   activeLeadId = null;
 }
 
-function setLeadStatus(id, status, el) {
+async function setLeadStatus(id, status, el) {
   const lead = leads.find(l => l.id === id);
   if (!lead) return;
   lead.status = status;
-  saveleadsToStorage();
-  renderLeads();
-  updateStats();
-  renderPipeline();
+  await saveLead_db(lead);
   el.closest('.status-select-group').querySelectorAll('.status-option').forEach(e => e.classList.remove('sel'));
   el.classList.add('sel');
 }
 
-function setLeadFit(id, fit, el) {
+async function setLeadFit(id, fit, el) {
   const lead = leads.find(l => l.id === id);
   if (!lead) return;
   lead.fit = fit;
-  saveleadsToStorage();
-  renderLeads();
-  updateStats();
+  await saveLead_db(lead);
   el.closest('.status-select-group').querySelectorAll('.status-option').forEach(e => e.classList.remove('sel'));
   el.classList.add('sel');
 }
 
-function setLeadStage(id, stage, el) {
+async function setLeadStage(id, stage, el) {
   const lead = leads.find(l => l.id === id);
   if (!lead) return;
   lead.stage = stage;
-  saveleadsToStorage();
-  renderLeads();
+  await saveLead_db(lead);
   el.closest('.stage-select-group').querySelectorAll('.stage-opt').forEach(e => e.classList.remove('sel'));
   el.classList.add('sel');
 }
 
-function markContacted() {
+async function markContacted() {
   const lead = leads.find(l => l.id === activeLeadId);
   if (!lead) return;
   lead.lastContacted = Date.now();
-  saveleadsToStorage();
-  renderLeads();
-  // Refresh the panel display
-  const lcLabel = document.getElementById('dp-last-contact');
-  lcLabel.textContent = 'Today (' + new Date().toLocaleDateString() + ')';
+  await saveLead_db(lead);
+  document.getElementById('dp-last-contact').textContent = 'Today (' + new Date().toLocaleDateString() + ')';
   document.getElementById('dp-followup-alert').innerHTML = '';
 }
 
@@ -1919,7 +2124,7 @@ function renderMsgLog(lead) {
   `).reverse().join('');
 }
 
-function logMessage() {
+async function logMessage() {
   const lead = leads.find(l => l.id === activeLeadId);
   if (!lead) return;
   const text = document.getElementById('dp-msg-input').value.trim();
@@ -1927,26 +2132,22 @@ function logMessage() {
   const type = document.getElementById('dp-msg-type').value;
   if (!lead.messages) lead.messages = [];
   lead.messages.push({ type, text, ts: Date.now() });
-  // If it's a sent message, auto-update lastContacted
   if (type === 'sent') { lead.lastContacted = Date.now(); }
-  saveleadsToStorage();
-  renderLeads();
+  await saveLead_db(lead);
   document.getElementById('dp-msg-input').value = '';
   renderMsgLog(lead);
-  // Refresh last contact display
   if (type === 'sent') {
     document.getElementById('dp-last-contact').textContent = 'Today (' + new Date().toLocaleDateString() + ')';
     document.getElementById('dp-followup-alert').innerHTML = '';
   }
 }
 
-function deleteMessage(idx) {
+async function deleteMessage(idx) {
   const lead = leads.find(l => l.id === activeLeadId);
   if (!lead || !lead.messages) return;
-  // idx is from reversed display, so map back
   const actualIdx = lead.messages.length - 1 - idx;
   lead.messages.splice(actualIdx, 1);
-  saveleadsToStorage();
+  await saveLead_db(lead);
   renderMsgLog(lead);
 }
 
@@ -1970,23 +2171,35 @@ function exportCSV() {
   a.click();
 }
 
-function saveDetailNotes() {
+async function saveDetailNotes() {
   const lead = leads.find(l => l.id === activeLeadId);
   if (!lead) return;
   lead.notes = document.getElementById('dp-notes').value;
-  saveleadsToStorage();
-  renderLeads();
+  await saveLead_db(lead);
+}
+  const headers = ['Name','Role','Location','LinkedIn URL','Status','Fit','Stage','Last Contacted','Notes'];
+  const stageLabels = {0:'None',1:'S1 Rapport',2:'S2 World',3:'S3 Pain',4:'S4 Pitch',5:'S5 Close'};
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const rows = leads.map(l => [
+    l.name, l.role||'', l.location||'', l.url||'',
+    STATUSES.find(s=>s.v===l.status)?.l||l.status,
+    l.fit==='strong'?'Strong':l.fit==='possible'?'Possible':'No fit',
+    stageLabels[l.stage||0]||'',
+    l.lastContacted ? new Date(l.lastContacted).toLocaleDateString() : '',
+    l.notes||''
+  ].map(q).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'zendt-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
 }
 
-function deleteLead() {
+async function deleteLead() {
   if (!activeLeadId) return;
   if (!confirm('Delete this lead?')) return;
-  leads = leads.filter(l => l.id !== activeLeadId);
-  saveleadsToStorage();
-  renderLeads();
-  updateStats();
-  renderPipeline();
-  populateLeadSelect();
+  await deleteLead_db(activeLeadId);
   closeDetail();
 }
 
@@ -2083,8 +2296,7 @@ async function runAI() {
         const existing = lead.notes || '';
         const timestamp = new Date().toLocaleDateString();
         lead.notes = existing + (existing ? '\n\n' : '') + `[AI ${currentMode==='profile'?'Profile Analysis':'Convo Reply'} - ${timestamp}]\n` + text.substring(0, 300) + '...';
-        saveleadsToStorage();
-        renderLeads();
+        await saveLead_db(lead);
       }
     }
 
@@ -2153,7 +2365,7 @@ function renderProfileOutput(text) {
   `;
 }
 
-function addLeadFromProfile() {
+async function addLeadFromProfile() {
   const p = window._lastParsedLead;
   if (!p || !p.name) return;
   if (leads.some(l => l.name.toLowerCase() === p.name.toLowerCase())) return;
@@ -2172,12 +2384,7 @@ function addLeadFromProfile() {
     messages: [],
     createdAt: Date.now()
   };
-  leads.unshift(lead);
-  saveleadsToStorage();
-  renderLeads();
-  updateStats();
-  renderPipeline();
-  populateLeadSelect();
+  await saveLead_db(lead);
 
   // Update the banner to show added state
   const banner = document.querySelector('.add-lead-banner');
@@ -2223,6 +2430,33 @@ function copyText(id) {
     }).catch(() => {});
   }
 }
+
+// ─── EXPOSE TO HTML (required for type="module") ──────────────────────────────
+window.switchView = switchView;
+window.switchMode = switchMode;
+window.filterLeads = filterLeads;
+window.openAddModal = openAddModal;
+window.closeAddModal = closeAddModal;
+window.saveLead = saveLead;
+window.openDetail = openDetail;
+window.closeDetail = closeDetail;
+window.setLeadStatus = setLeadStatus;
+window.setLeadFit = setLeadFit;
+window.setLeadStage = setLeadStage;
+window.markContacted = markContacted;
+window.logMessage = logMessage;
+window.deleteMessage = deleteMessage;
+window.saveDetailNotes = saveDetailNotes;
+window.deleteLead = deleteLead;
+window.analyzeThisLead = analyzeThisLead;
+window.replyThisLead = replyThisLead;
+window.addLeadFromProfile = addLeadFromProfile;
+window.runAI = runAI;
+window.copyText = copyText;
+window.exportCSV = exportCSV;
+window.quickStatus = quickStatus;
+window.saveApiKey = saveApiKey;
+window.doLogin = doLogin;
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 init();
