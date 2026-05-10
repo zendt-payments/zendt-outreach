@@ -2300,6 +2300,9 @@ async function runAI() {
       renderConvoOutput(text);
     }
 
+    // Clear input after successful analysis
+    document.getElementById('ai-input').value = '';
+
     // Save notes to lead if selected
     const leadSel = document.getElementById('lead-link-select').value;
     if (leadSel) {
@@ -2337,7 +2340,7 @@ function renderProfileOutput(text) {
   const alreadyExists = name && leads.some(l => l.name.toLowerCase() === name.toLowerCase());
 
   const addBtnHtml = isGoodFit && name ? `
-    <button class="add-lead-banner ${alreadyExists ? 'already' : ''}" onclick="${alreadyExists ? '' : 'addLeadFromProfile()'}">
+    <button class="add-lead-banner ${alreadyExists ? 'already' : ''}" data-action="${alreadyExists ? '' : 'addLead'}">
       ${alreadyExists
         ? `<span>&#10003; ${name} is already in your leads</span>`
         : `<span>&#43; Add <strong>${name}</strong> as a lead</span><span class="fit-tag fit-${fitKey}" style="margin-left:8px">${fit}</span>`
@@ -2471,11 +2474,17 @@ window.saveApiKey = saveApiKey;
 window.doLogin = doLogin;
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
-// Modules are deferred — DOM is ready by the time this runs
 document.getElementById('login-btn').addEventListener('click', doLogin);
 document.getElementById('login-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') doLogin();
 });
+
+// Event delegation for dynamically rendered buttons in AI output
+document.getElementById('ai-output').addEventListener('click', function(e) {
+  const banner = e.target.closest('[data-action="addLead"]');
+  if (banner) { addLeadFromProfile(); return; }
+});
+
 init();
 </script>
 </body>
