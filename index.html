@@ -2019,10 +2019,13 @@ function switchMode(m) {
   document.getElementById('mode-hint').textContent = m==='profile'
     ? 'Paste a LinkedIn profile to get fit assessment, connection note, and first DM'
     : 'Paste the full conversation thread to get the next best reply';
-  document.getElementById('run-btn').textContent = m==='profile' ? 'RUN ANALYSIS' : 'SUGGEST REPLY';
-  document.getElementById('ai-input').placeholder = m==='profile'
+  document.getElementById('run-btn').textContent = m==='profile' ? 'Run Analysis' : 'Suggest Reply';
+  const textarea = document.getElementById('ai-input');
+  textarea.value = '';
+  textarea.placeholder = m==='profile'
     ? 'Paste LinkedIn profile text here...'
     : 'Paste the full conversation thread here...';
+  document.getElementById('ai-output').innerHTML = '<div class="placeholder-msg">Paste a ' + (m==='profile' ? 'profile' : 'conversation') + ' on the left<br>and hit ' + (m==='profile' ? 'Run Analysis' : 'Suggest Reply') + ' to get started.</div>';
 }
 
 function populateLeadSelect() {
