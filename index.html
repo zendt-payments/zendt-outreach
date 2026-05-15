@@ -1389,6 +1389,7 @@
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="switchView('leads')">Leads</div>
     <div class="nav-tab" onclick="switchView('ai')">AI Assistant</div>
+    <div class="nav-tab" onclick="switchView('posts')">Post Generator</div>
   </div>
   <div class="api-status">
     <div class="api-dot connected" id="api-dot"></div>
@@ -1539,6 +1540,35 @@
     </div>
 
   </main>
+</div>
+
+<!-- POST GENERATOR VIEW -->
+<div id="view-posts" style="display:none;flex:1;overflow:auto;padding:24px;gap:24px;flex-direction:column;">
+  <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+    <div style="flex:1;min-width:200px;">
+      <div style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">Post Type</div>
+      <select id="post-type" class="form-select" style="width:100%;">
+        <option value="pain">Freelancer Pain Point</option>
+        <option value="product">Zendt Product Post</option>
+      </select>
+    </div>
+    <div style="flex:2;min-width:260px;">
+      <div style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">Topic / Angle (optional)</div>
+      <input id="post-topic" class="form-input" placeholder="e.g. PayPal fees eating into earnings, receiving GCC payments..." style="width:100%;" />
+    </div>
+    <button onclick="generatePost()" class="run-btn" id="post-btn" style="white-space:nowrap;padding:10px 28px;">Generate Post</button>
+  </div>
+
+  <div id="post-output" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;">
+    <div style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;">Generated Post</div>
+    <div id="post-content" style="font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="copyPost()" style="background:var(--accent-dim);color:var(--accent);border:1px solid rgba(79,142,247,0.3);border-radius:7px;padding:8px 20px;font-size:12px;cursor:pointer;font-family:inherit;">Copy Post</button>
+      <button onclick="generatePost()" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:7px;padding:8px 20px;font-size:12px;cursor:pointer;font-family:inherit;">Regenerate</button>
+    </div>
+  </div>
+
+  <div id="post-placeholder" style="color:var(--text3);font-size:13px;margin-top:8px;">Select a post type, add an optional angle, and hit Generate Post.</div>
 </div>
 
 <!-- ADD LEAD MODAL -->
@@ -1758,6 +1788,127 @@ const SYSTEM_CONVO = "You are a LinkedIn outreach assistant for Zendt Payments.\
 "STAGE: [1, 2, 3, 4, or 5]\n" +
 "REPLY: [Ready to copy-paste message, no quotes]";
 
+const SYSTEM_POST = "You are a LinkedIn post writer and optimizer for Nidhish Reghunath, a team member at Zendt Payments.\n\n" +
+"ABOUT ZENDT PAYMENTS:\n" +
+"- Cross-border payment platform built specifically for Indian freelancers\n" +
+"- 4% platform fee + live FX rate for international payments. No hidden charges.\n" +
+"- Free UPI for domestic payments\n" +
+"- Supports all global currencies including GCC (AED, QAR, SAR, KWD)\n" +
+"- Pre-launch, waitlist at zendtpayments.com\n" +
+"- Founded by Alen Thomas, a freelancer who personally lost money on GCC payments for 6 years\n" +
+"- Competitors: PayPal (4.4% fee + 2.5-4% conversion = 7-8% effective), Skydo (5%, US only), Briskpe (8.5-9.5%), Infinity QuickLink (7%)\n\n" +
+"NIDHISH'S VOICE:\n" +
+"- First-person, warm, observational, curious\n" +
+"- Writes like someone who genuinely cares about freelancers, not a marketer\n" +
+"- Short punchy sentences. No corporate speak.\n" +
+"- Never uses: 'excited', 'thrilled', 'game-changer', 'innovative', 'passionate', 'journey', 'inspiring'\n" +
+"- No em dashes. No excessive exclamation marks.\n" +
+"- Ends posts with a soft question or reflection that invites comments\n\n" +
+"POST TYPES:\n\n" +
+"PAIN POST: About the real struggle Indian freelancers face with international payments.\n" +
+"- Tell a story or observation, not a pitch\n" +
+"- Make the reader nod and say 'yes, this is me'\n" +
+"- Can mention Zendt softly at the end, one line max, or not at all\n" +
+"- 150-250 words. No bullet lists. Pure storytelling.\n\n" +
+"PRODUCT POST: About what Zendt is building and why it matters.\n" +
+"- Lead with the problem, not the product\n" +
+"- Mention Zendt naturally in the middle or end\n" +
+"- Include a soft waitlist CTA at the end: zendtpayments.com\n" +
+"- 150-250 words. Conversational paragraphs.\n\n" +
+"RULES:\n" +
+"- Never start with 'I am excited' or 'I am thrilled'\n" +
+"- Never use hashtags unless specifically asked\n" +
+"- Never write a bulleted list as the main format\n" +
+"- Always sound like a real person who observed something, not a startup account posting content\n\n" +
+"YOUR PROCESS (do this internally before outputting):\n" +
+"Step 1 — Write a first draft of the post.\n" +
+"Step 2 — Audit it against these LinkedIn optimization criteria:\n" +
+"  HOOK: Does the first line stop the scroll? Is it specific, human, and curiosity-driving? Not a question opener. Not a generic statement.\n" +
+"  READABILITY: Short sentences. White space between paragraphs. Easy to skim.\n" +
+"  AUTHENTICITY: Does it sound like a real person or a content account? Remove any corporate or startup-speak.\n" +
+"  EMOTION: Does it make the reader feel something — frustration, recognition, hope?\n" +
+"  CTA: Does it end with something that invites a response — a question, a reflection, or a soft action?\n" +
+"  LENGTH: 150-250 words. Not too short to be shallow, not too long to lose attention.\n" +
+"  BANNED WORDS CHECK: Remove any of these if present — excited, thrilled, game-changer, innovative, passionate, journey, inspiring, leverage, ecosystem, synergy, cutting-edge.\n" +
+"Step 3 — Rewrite and improve based on the audit.\n" +
+"Step 4 — Output only the final optimized post. No audit notes, no labels, no explanation. Just the post.";
+
+
+// ─── POST GENERATOR ────────────────────────────────────────────────────────────
+const POST_HISTORY_KEY = 'zendt_post_history';
+const MAX_POST_HISTORY = 10;
+
+function getPostHistory() {
+  try { return JSON.parse(localStorage.getItem(POST_HISTORY_KEY) || '[]'); } catch { return []; }
+}
+
+function saveToPostHistory(type, topic, firstLine) {
+  const history = getPostHistory();
+  history.unshift({ type, topic, firstLine, ts: Date.now() });
+  if (history.length > MAX_POST_HISTORY) history.length = MAX_POST_HISTORY;
+  localStorage.setItem(POST_HISTORY_KEY, JSON.stringify(history));
+}
+
+async function generatePost() {
+  const type = document.getElementById('post-type').value;
+  const topic = document.getElementById('post-topic').value.trim();
+  const btn = document.getElementById('post-btn');
+  const output = document.getElementById('post-output');
+  const placeholder = document.getElementById('post-placeholder');
+  const content = document.getElementById('post-content');
+
+  const typeLabel = type === 'pain' ? 'PAIN POST' : 'PRODUCT POST';
+
+  // Build history context to avoid repetition
+  const history = getPostHistory();
+  const historyContext = history.length
+    ? '\n\nPREVIOUSLY GENERATED POSTS (do NOT repeat these angles, hooks, or opening lines):\n' +
+      history.map((h, i) => `${i+1}. [${h.type}] ${h.topic ? 'Topic: ' + h.topic + ' | ' : ''}Opening: "${h.firstLine}"`).join('\n')
+    : '';
+
+  const userMsg = `Write a ${typeLabel} for LinkedIn.${topic ? ' Angle/topic: ' + topic : ' Pick a fresh angle that would resonate with Indian freelancers working with international clients.'}${historyContext}\n\nMake sure this post has a completely different hook, opening line, and angle from any previously generated posts listed above.`;
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  output.style.display = 'none';
+  placeholder.textContent = 'Writing your post...';
+
+  try {
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_POST,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content || []).map(b => b.text || '').join('').trim();
+    const firstLine = text.split('\n')[0].slice(0, 80);
+    saveToPostHistory(typeLabel, topic, firstLine);
+    content.textContent = text;
+    output.style.display = 'block';
+    placeholder.textContent = '';
+  } catch(e) {
+    placeholder.textContent = 'Something went wrong. Try again.';
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate Post';
+  }
+}
+
+function copyPost() {
+  const text = document.getElementById('post-content').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Post', 2000);
+  });
+}
+
 // ─── AUTH ──────────────────────────────────────────────────────────────────────
 const PASSPHRASE = 'zendt2026';  // ← change this to whatever you want
 const SESSION_KEY = 'zendt_auth';
@@ -1846,13 +1997,13 @@ function updateApiStatus() {
 
 // ─── VIEWS ────────────────────────────────────────────────────────────────────
 function switchView(v) {
-  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&v==='leads')||(i===1&&v==='ai')));
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&v==='leads')||(i===1&&v==='ai')||(i===2&&v==='posts')));
   document.getElementById('view-leads').classList.toggle('active', v==='leads');
   document.getElementById('view-ai').classList.toggle('active', v==='ai');
-  // ai-view is inside view-ai but has its own display logic
   const aiView = document.getElementById('view-ai');
   if (aiView) aiView.style.display = v==='ai' ? 'flex' : 'none';
-  // close detail panel when switching views
+  const postsView = document.getElementById('view-posts');
+  if (postsView) postsView.style.display = v==='posts' ? 'flex' : 'none';
   if (v === 'leads') closeDetail();
 }
 
