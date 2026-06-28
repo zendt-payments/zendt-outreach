@@ -270,6 +270,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
         <thead><tr><th>Stage</th><th>Count</th><th>%</th></tr></thead>
         <tbody id="li-stages-body"></tbody>
       </table>
+      <div style="margin-top:16px">
+        <div class="panel-title" style="font-size:12px;margin-bottom:10px">Who updated what</div>
+        <table class="member-table">
+          <thead><tr><th>Team Member</th><th>Leads Updated</th><th>Last Active</th></tr></thead>
+          <tbody id="li-members-body"></tbody>
+        </table>
+      </div>
     </div>
 
   </div>
@@ -446,6 +453,26 @@ function renderLinkedIn() {
       <td style="font-family:var(--mono)">${counts[s.v]}</td>
       <td style="font-family:var(--mono);color:var(--text3)">${liLeads.length ? Math.round(counts[s.v]/liLeads.length*100)+'%' : '—'}</td>
     </tr>`).join('');
+
+  // Who updated what
+  const memberMap = {};
+  liLeads.forEach(l => {
+    const m = l.lastUpdatedBy || 'Unknown';
+    if (!memberMap[m]) memberMap[m] = { count: 0, lastAt: 0 };
+    memberMap[m].count++;
+    const ts = l.lastUpdatedAt || l.createdAt || 0;
+    if (ts > memberMap[m].lastAt) memberMap[m].lastAt = ts;
+  });
+
+  const memberRows = Object.entries(memberMap).sort((a,b) => b[1].count - a[1].count);
+  document.getElementById('li-members-body').innerHTML = memberRows.length > 0
+    ? memberRows.map(([name, d]) => `
+        <tr>
+          <td class="member-name-cell" style="text-transform:capitalize">${esc(name)}</td>
+          <td style="font-family:var(--mono)">${d.count}</td>
+          <td style="font-family:var(--mono);font-size:11px;color:var(--text3)">${d.lastAt ? new Date(d.lastAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : 'Never'}</td>
+        </tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--text3);font-size:12px;padding:10px 0">No activity tracked yet</td></tr>';
 }
 
 // ── REDDIT ────────────────────────────────────────────────────────────────────

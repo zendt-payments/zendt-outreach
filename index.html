@@ -1231,153 +1231,64 @@
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
   /* ── LOGIN SCREEN ── */
-  .login-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
 
-  .login-box {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 16px;
-    padding: 40px 36px;
-    width: 380px;
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
 
-  .login-logo {
-    width: 72px; height: 72px;
-    background: #0f1117;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 18px;
-  }
 
-  .login-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.02em;
-    margin-bottom: 4px;
-  }
 
-  .login-sub {
-    font-size: 13px;
-    color: var(--text3);
-    margin-bottom: 32px;
-  }
 
-  .login-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    color: var(--text3);
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 8px;
-    align-self: flex-start;
-    width: 100%;
-  }
 
-  .login-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 15px;
-    font-weight: 500;
-    outline: none;
-    text-align: center;
-    letter-spacing: 0.2em;
-    transition: all 0.15s;
-    margin-bottom: 14px;
-  }
 
-  .login-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(79,142,247,0.15);
-  }
 
-  .login-btn {
-    width: 100%;
-    padding: 13px;
-    background: var(--accent);
-    border: none;
-    border-radius: var(--radius);
-    color: #fff;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.18s;
-    box-shadow: 0 2px 10px rgba(79,142,247,0.35);
-    letter-spacing: 0.01em;
-  }
 
-  .login-btn:hover {
-    background: #3d7ef5;
-    box-shadow: 0 4px 20px rgba(79,142,247,0.45);
-    transform: translateY(-1px);
-  }
 
-  .login-error {
-    font-size: 12px;
-    color: var(--red);
-    font-weight: 500;
-    margin-top: 10px;
-    min-height: 18px;
-    text-align: center;
-  }
 
-  .login-footer {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 24px;
-    text-align: center;
-    line-height: 1.6;
-  }
+
+  /* ── USER SELECT ── */
+  .user-overlay { position: fixed; inset: 0; background: #0a0b10; display: flex; align-items: center; justify-content: center; z-index: 999; }
+  .user-box { width: 320px; background: #111318; border: 1px solid #2e3850; border-radius: 14px; padding: 32px 28px; text-align: center; }
+  .user-logo { width: 44px; height: 44px; background: #0D1B3E; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; margin: 0 auto 16px; }
+  .user-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .user-sub { font-size: 12px; color: #5a6480; margin-bottom: 28px; }
+  .user-btn { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #2e3850; background: #181c24; color: #f0f2f7; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--sans); transition: all .15s; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+  .user-btn:hover { background: #1e2330; border-color: #7C5CFC; }
+  .user-btn:last-child { margin-bottom: 0; }
+  .user-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .user-info { text-align: left; }
+  .user-name { font-size: 14px; font-weight: 600; }
+  .user-role { font-size: 11px; color: #9aa3b8; font-weight: 400; margin-top: 2px; }
+  .user-footer { font-size: 11px; color: #5a6480; margin-top: 20px; }
 </style>
 </head>
 <body>
 
 <!-- LOGIN SCREEN -->
-<div class="login-overlay" id="login-overlay">
-  <div class="login-box">
-    <div class="login-logo">
-      <img src="logo.png" alt="Zendt" style="width:60px;height:60px;object-fit:contain;filter:invert(1)" />
-    </div>
-    <div class="login-title">Zendt Outreach</div>
-    <div class="login-sub">Internal sales tool</div>
-    <div class="login-label">Passphrase</div>
-    <input
-      class="login-input"
-      id="login-input"
-      type="password"
-      placeholder="••••••••"
-      autocomplete="current-password"
-    />
-    <button class="login-btn" id="login-btn">Sign In</button>
-    <div class="login-error" id="login-error"></div>
-    <div class="login-footer">Zendt Payments · Internal use only</div>
+
+
+<!-- TOP NAV -->
+
+<div class="user-overlay" id="user-overlay">
+  <div class="user-box">
+    <div class="user-logo">Z</div>
+    <div class="user-title">Zendt Outreach</div>
+    <div class="user-sub">Who is using the tool today?</div>
+    <button class="user-btn" onclick="selectUser('nidhish', 'Growth')">
+      <div class="user-avatar" style="background:#7C5CFC">N</div>
+      <div class="user-info">
+        <div class="user-name">Nidhish</div>
+        <div class="user-role">Growth & Distribution</div>
+      </div>
+    </button>
+    <button class="user-btn" onclick="selectUser('akshay', 'COO')">
+      <div class="user-avatar" style="background:#0F6E56">A</div>
+      <div class="user-info">
+        <div class="user-name">Akshay</div>
+        <div class="user-role">Co-founder & COO</div>
+      </div>
+    </button>
+    <div class="user-footer">Zendt Payments · Internal use only</div>
   </div>
 </div>
 
-<!-- TOP NAV -->
 <nav class="topnav">
   <div class="logo">
     <div class="logo-icon">
@@ -1914,48 +1825,36 @@ function copyPost() {
 }
 
 // ─── AUTH ──────────────────────────────────────────────────────────────────────
-// Hardcoded users — username: password
-const USERS = {
-  'nidhish': 'zN!dhish#92',
-  'akshay':  'zAk$hay#57'
-};
-const SESSION_KEY = 'zendt_auth';
 
-function doLogin() {
-  const username = (document.getElementById('login-username')?.value || '').trim().toLowerCase();
-  const password = document.getElementById('login-input').value.trim();
-  const errEl = document.getElementById('login-error');
-  if (USERS[username] && USERS[username] === password) {
-    localStorage.setItem(SESSION_KEY, 'true');
-    localStorage.setItem('zendt_user', username);
-    document.getElementById('login-overlay').style.display = 'none';
-    errEl.textContent = '';
-    // Show username in nav if element exists
-    const userEl = document.getElementById('nav-user');
-    if (userEl) userEl.textContent = username;
-  } else {
-    errEl.textContent = 'Incorrect username or password.';
-    document.getElementById('login-input').value = '';
-    document.getElementById('login-input').focus();
-    const box = document.querySelector('.login-box');
-    box.style.transition = 'transform 0.1s';
-    box.style.transform = 'translateX(-6px)';
-    setTimeout(() => box.style.transform = 'translateX(6px)', 100);
-    setTimeout(() => box.style.transform = 'translateX(-4px)', 200);
-    setTimeout(() => box.style.transform = 'translateX(0)', 300);
-  }
+
+
+function doLogin() {}
+
+function selectUser(name, role) {
+  sessionStorage.setItem('zendt_user', name);
+  sessionStorage.setItem('zendt_role', role);
+  document.getElementById('user-overlay').style.display = 'none';
+  const badge = document.getElementById('nav-user-badge');
+  if (badge) { badge.textContent = name; badge.style.display = 'inline'; }
+  // Also update any lead actions to log this user
+  window.currentUser = name;
+}
+
+function getCurrentUser() {
+  return sessionStorage.getItem('zendt_user') || 'Team';
 }
 
 function checkAuth() {
-  const overlay = document.getElementById('login-overlay');
-  if (localStorage.getItem(SESSION_KEY) === 'true') {
-    overlay.style.display = 'none';
+  const user = sessionStorage.getItem('zendt_user');
+  if (user) {
+    document.getElementById('user-overlay').style.display = 'none';
+    const badge = document.getElementById('nav-user-badge');
+    if (badge) { badge.textContent = user; badge.style.display = 'inline'; }
+    window.currentUser = user;
     return true;
-  } else {
-    overlay.style.display = 'flex';
-    setTimeout(() => document.getElementById('login-input').focus(), 100);
-    return false;
   }
+  document.getElementById('user-overlay').style.display = 'flex';
+  return false;
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
@@ -2023,6 +1922,8 @@ function switchView(v) {
 // ─── LEADS ────────────────────────────────────────────────────────────────────
 // ─── FIRESTORE ────────────────────────────────────────────────────────────────
 async function saveLead_db(lead) {
+  lead.lastUpdatedBy = getCurrentUser();
+  lead.lastUpdatedAt = Date.now();
   try {
     if (window._fbSave) await window._fbSave(lead);
     else { // fallback to localStorage if Firebase not loaded
@@ -2608,7 +2509,7 @@ function renderConvoOutput(text) {
         <span class="out-block-title">Suggested Reply</span>
         <button class="copy-btn" onclick="copyText('reply-out')">COPY</button>
       </div>
-      <div class="out-block-body highlight" id="reply-out">${reply}</div>
+      
     </div>
   `;
 }
@@ -2651,14 +2552,7 @@ window.saveApiKey = saveApiKey;
 window.doLogin = doLogin;
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
-document.getElementById('login-btn').addEventListener('click', doLogin);
-document.getElementById('login-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-const unEl = document.getElementById('login-username');
-if (unEl) unEl.addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('login-input').focus();
-});
+
 
 // Event delegation for dynamically rendered buttons in AI output
 document.getElementById('ai-output').addEventListener('click', function(e) {
