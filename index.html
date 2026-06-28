@@ -1302,17 +1302,18 @@
     <div class="nav-tab" onclick="switchView('ai')">AI Assistant</div>
     <div class="nav-tab" onclick="switchView('posts')">Post Generator</div>
   </div>
-  <div class="api-status">
+  <div class="api-status" onclick="toggleApiBar()" style="cursor:pointer;user-select:none" title="Click to update API key">
     <div class="api-dot connected" id="api-dot"></div>
     <span id="api-status-text">CONNECTED</span>
+    <span style="font-size:9px;opacity:0.5;margin-left:2px">✎</span>
   </div>
 </nav>
 
-<!-- SETUP BAR hidden - key is server-side -->
 <div class="setup-bar" id="setup-bar" style="display:none">
-  <span>⚠ API key required for AI features</span>
+  <span style="white-space:nowrap;flex-shrink:0">Anthropic API Key:</span>
   <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
-  <button onclick="saveApiKey()">Connect</button>
+  <button onclick="saveApiKey()">Save</button>
+  <button onclick="document.getElementById('setup-bar').style.display='none'" style="background:transparent;border-color:rgba(251,191,36,0.1);color:var(--text3)">✕</button>
 </div>
 
 <!-- APP -->
@@ -1793,7 +1794,7 @@ async function generatePost() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         system: SYSTEM_POST,
         messages: [{ role: 'user', content: userMsg }]
@@ -1884,6 +1885,18 @@ function init() {
 }
 
 // ─── API KEY ─────────────────────────────────────────────────────────────────
+function toggleApiBar() {
+  const bar = document.getElementById('setup-bar');
+  const isVisible = bar.style.display !== 'none';
+  bar.style.display = isVisible ? 'none' : 'flex';
+  if (!isVisible) {
+    const input = document.getElementById('api-key-input');
+    input.value = '';
+    input.placeholder = apiKey ? 'Enter new key to replace...' : 'sk-ant-api03-...';
+    setTimeout(() => input.focus(), 50);
+  }
+}
+
 function saveApiKey() {
   const key = document.getElementById('api-key-input').value.trim();
   if (!key) return;
@@ -1899,7 +1912,10 @@ function updateApiStatus() {
   if (apiKey) {
     dot.classList.add('connected');
     txt.textContent = 'CONNECTED';
-    bar.style.display = 'none';
+    // Only hide bar if it was the no-key state showing it
+    if (bar.getAttribute('data-manual') !== 'true') {
+      bar.style.display = 'none';
+    }
   } else {
     dot.classList.remove('connected');
     txt.textContent = 'NO API KEY';
@@ -2353,7 +2369,7 @@ async function runAI() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         system,
         messages: [{ role: 'user', content: userMsg }]
@@ -2549,6 +2565,7 @@ window.copyText = copyText;
 window.exportCSV = exportCSV;
 window.quickStatus = quickStatus;
 window.saveApiKey = saveApiKey;
+window.toggleApiBar = toggleApiBar;
 window.doLogin = doLogin;
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
