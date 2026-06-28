@@ -514,8 +514,8 @@
   .s-connected::before  { background: var(--green); }
   .s-messaged   { background: rgba(167,139,250,0.1); color: var(--violet); border: 1px solid rgba(167,139,250,0.2); }
   .s-messaged::before   { background: var(--violet); }
-  .s-waitlisted { background: rgba(52,211,153,0.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
-  .s-waitlisted::before { background: #6ee7b7; }
+  .s-waitlisted, .s-downloaded { background: rgba(52,211,153,0.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
+  .s-waitlisted::before, .s-downloaded::before { background: #6ee7b7; }
   .s-notfit     { background: rgba(255,255,255,0.03); color: var(--text3); border: 1px solid var(--border); }
   .s-notfit::before     { background: var(--text3); }
 
@@ -1335,9 +1335,9 @@
           <div class="stat-num" id="stat-messaged">0</div>
           <div class="stat-label">Messaged</div>
         </div>
-        <div class="stat-card s-converted" onclick="filterLeads('waitlisted')">
+        <div class="stat-card s-converted" onclick="filterLeads('downloaded')">
           <div class="stat-num" id="stat-converted">0</div>
-          <div class="stat-label">Waitlisted</div>
+          <div class="stat-label">Downloaded</div>
         </div>
       </div>
     </div>
@@ -1512,7 +1512,7 @@
           <option value="invited">Invitation Sent</option>
           <option value="connected">Connected</option>
           <option value="messaged">Messaged</option>
-          <option value="waitlisted">Waitlisted</option>
+          <option value="downloaded">Downloaded</option>
           <option value="notfit">Not a Fit</option>
         </select>
       </div>
@@ -1686,7 +1686,7 @@ const SYSTEM_CONVO = "You are a LinkedIn outreach assistant for Zendt Payments.\
 "- NEVER introduce Zendt just because they mentioned using PayPal or payment platforms. That is not pain — that is just information.\n" +
 "- ONLY introduce Zendt if they have explicitly said something like 'fees are high', 'I lose money on conversion', 'it's frustrating', or similar words showing real frustration.\n" +
 "- If they say fees are manageable or they have it under control — do NOT mention Zendt. Stay in Stage 3 and ask a follow-up.\n" +
-"- Never mention Zendt by name, give fee percentages, explain product features, and drop a waitlist link all in the same message. That is a sales pitch and will destroy the relationship.\n" +
+"- Never mention Zendt by name, give fee percentages, explain product features, and drop the download link all in the same message. That is a sales pitch and will destroy the relationship.\n" +
 "- The Zendt mention should feel like a friend saying 'oh I actually know something that might help' — not a product pitch.\n" +
 "- One idea per message. Either mention Zendt briefly OR give the link. Never both in one message.\n\n" +
 "PAIN ANGLES:\n" +
@@ -2007,7 +2007,7 @@ function updateStats() {
   document.getElementById('stat-total').textContent = leads.length;
   document.getElementById('stat-connected').textContent = leads.filter(l=>l.status==='connected').length;
   document.getElementById('stat-messaged').textContent = leads.filter(l=>l.status==='messaged').length;
-  document.getElementById('stat-converted').textContent = leads.filter(l=>l.status==='waitlisted').length;
+  document.getElementById('stat-converted').textContent = leads.filter(l=>l.status==='downloaded').length;
   document.getElementById('fit-strong-count').textContent = leads.filter(l=>l.fit==='strong').length;
   document.getElementById('fit-possible-count').textContent = leads.filter(l=>l.fit==='possible').length;
   document.getElementById('fit-no-count').textContent = leads.filter(l=>l.fit==='no').length;

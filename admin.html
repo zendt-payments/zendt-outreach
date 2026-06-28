@@ -145,6 +145,28 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
 
 /* ── LAST UPDATED ── */
 .last-updated { font-size: 11px; color: var(--text3); font-family: var(--mono); text-align: center; margin-top: 24px; padding-bottom: 24px; }
+
+  /* ── LEADERBOARD ── */
+  .lb-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .lb-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; position: relative; overflow: hidden; }
+  .lb-card.rank-1 { border-color: #BA7517; }
+  .lb-card.rank-1::after { content: '🥇'; position: absolute; top: 14px; right: 14px; font-size: 20px; }
+  .lb-card.rank-2 { border-color: #5a6480; }
+  .lb-card.rank-2::after { content: '🥈'; position: absolute; top: 14px; right: 14px; font-size: 20px; }
+  .lb-card.rank-3::after { content: '🥉'; position: absolute; top: 14px; right: 14px; font-size: 20px; }
+  .lb-name { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: capitalize; }
+  .lb-score { font-size: 36px; font-weight: 700; font-family: var(--mono); color: var(--purple); margin-bottom: 4px; }
+  .lb-score-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; }
+  .lb-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .lb-stat { background: var(--surface2); border-radius: var(--rs); padding: 8px; }
+  .lb-stat-num { font-size: 16px; font-weight: 700; font-family: var(--mono); color: var(--text); }
+  .lb-stat-lbl { font-size: 9px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+  .lb-bar-wrap { margin-top: 12px; }
+  .lb-bar-lbl { font-size: 10px; color: var(--text3); margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .lb-bar-bg { background: var(--surface2); border-radius: 3px; height: 5px; overflow: hidden; }
+  .lb-bar-fill { height: 100%; border-radius: 3px; background: var(--purple); transition: width .4s; }
+  .lb-empty { font-size: 13px; color: var(--text3); padding: 20px 0; text-align: center; }
+
 </style>
 </head>
 <body>
@@ -215,6 +237,11 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
       <div class="ov-sub">LinkedIn → app downloaded</div>
     </div>
   </div>
+
+
+  <!-- LEADERBOARD -->
+  <div class="section-title" style="margin-top:4px">Team Leaderboard</div>
+  <div class="lb-wrap" id="leaderboard"></div>
 
   <!-- LINKEDIN + REDDIT TOP ROW -->
   <div class="two-col">
@@ -365,6 +392,117 @@ function fsToObj(doc) {
 
 function esc(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+
+// ── LEADERBOARD ────────────────────────────────────────────────────────────────
+function renderLeaderboard() {
+  // Collect stats per person across both tools
+  const people = {};
+
+  const addPerson = (name) => {
+    if (!name || name === 'Team' || name === 'Unknown') return;
+    const n = name.toLowerCase();
+    if (!people[n]) people[n] = {
+      name: n,
+      rdGenerated: 0,
+      rdReplied: 0,
+      liLeads: 0,
+      liConnected: 0,
+      liMessaged: 0,
+      liDownloaded: 0,
+      lastActive: 0,
+    };
+    return people[n];
+  };
+
+  // Reddit data
+  rdReplies.forEach(r => {
+    const p = addPerson(r.memberName);
+    if (p) {
+      p.rdGenerated++;
+      const ts = r.createdAt ? new Date(r.createdAt).getTime() : 0;
+      if (ts > p.lastActive) p.lastActive = ts;
+    }
+  });
+  rdReplied.forEach(r => {
+    const p = addPerson(r.memberName);
+    if (p) {
+      p.rdReplied++;
+      const ts = r.repliedAt ? new Date(r.repliedAt).getTime() : 0;
+      if (ts > p.lastActive) p.lastActive = ts;
+    }
+  });
+
+  // LinkedIn data
+  liLeads.forEach(l => {
+    const p = addPerson(l.lastUpdatedBy);
+    if (p) {
+      p.liLeads++;
+      if (['connected','messaged','downloaded'].includes(l.status)) p.liConnected++;
+      if (['messaged','downloaded'].includes(l.status)) p.liMessaged++;
+      if (l.status === 'downloaded') p.liDownloaded++;
+      const ts = l.lastUpdatedAt || l.createdAt || 0;
+      if (ts > p.lastActive) p.lastActive = ts;
+    }
+  });
+
+  const list = Object.values(people);
+
+  if (list.length === 0) {
+    document.getElementById('leaderboard').innerHTML =
+      '<div class="lb-empty">No activity tracked yet. Start using the tools to see leaderboard data.</div>';
+    return;
+  }
+
+  // Score = weighted total activity
+  // Reddit reply (marked) = 3pts, Reddit generated = 1pt
+  // LinkedIn lead = 1pt, connected = 2pts, messaged = 3pts, downloaded = 5pts
+  list.forEach(p => {
+    p.score = (p.rdReplied * 3) + (p.rdGenerated * 1) +
+              (p.liLeads * 1) + (p.liConnected * 2) +
+              (p.liMessaged * 3) + (p.liDownloaded * 5);
+  });
+
+  list.sort((a, b) => b.score - a.score);
+  const maxScore = list[0]?.score || 1;
+
+  document.getElementById('leaderboard').innerHTML = list.map((p, i) => `
+    <div class="lb-card rank-${i+1}">
+      <div class="lb-name">${esc(p.name)}</div>
+      <div class="lb-score">${p.score}</div>
+      <div class="lb-score-lbl">Performance score</div>
+      <div class="lb-stats">
+        <div class="lb-stat">
+          <div class="lb-stat-num">${p.rdReplied}</div>
+          <div class="lb-stat-lbl">Reddit replied</div>
+        </div>
+        <div class="lb-stat">
+          <div class="lb-stat-num">${p.rdGenerated}</div>
+          <div class="lb-stat-lbl">Reddit generated</div>
+        </div>
+        <div class="lb-stat">
+          <div class="lb-stat-num">${p.liLeads}</div>
+          <div class="lb-stat-lbl">LI leads</div>
+        </div>
+        <div class="lb-stat">
+          <div class="lb-stat-num">${p.liMessaged}</div>
+          <div class="lb-stat-lbl">LI messaged</div>
+        </div>
+      </div>
+      <div class="lb-bar-wrap">
+        <div class="lb-bar-lbl">
+          <span>Score vs top</span>
+          <span>${Math.round(p.score/maxScore*100)}%</span>
+        </div>
+        <div class="lb-bar-bg">
+          <div class="lb-bar-fill" style="width:${Math.round(p.score/maxScore*100)}%"></div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:10px">
+        Last active: ${p.lastActive ? new Date(p.lastActive).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : 'Never'}
+      </div>
+    </div>`).join('');
+}
+
 // ── DATA LOAD ─────────────────────────────────────────────────────────────────
 let rdReplies = [], rdReplied = [], liLeads = [];
 
@@ -389,6 +527,7 @@ async function loadAll() {
   }
 
   renderOverview();
+  renderLeaderboard();
   renderLinkedIn();
   renderReddit();
   renderActivity();
