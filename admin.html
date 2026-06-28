@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zendt Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0a0b10;
+  --surface:  #111318;
+  --surface2: #181c24;
+  --surface3: #1e2330;
+  --border:   #232a38;
+  --border2:  #2e3850;
+  --navy:     #0D1B3E;
+  --purple:   #7C5CFC;
+  --purplt:   rgba(124,92,252,0.12);
+  --teal:     #0F6E56;
+  --tealt:    rgba(15,110,86,0.12);
+  --amber:    #BA7517;
+  --ambrt:    rgba(186,117,23,0.12);
+  --blue:     #185FA5;
+  --bluet:    rgba(24,95,165,0.12);
+  --red:      #993C1D;
+  --redt:     rgba(153,60,29,0.12);
+  --green:    #22c55e;
+  --greent:   rgba(34,197,94,0.1);
+  --text:     #f0f2f7;
+  --text2:    #9aa3b8;
+  --text3:    #5a6480;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'Plus Jakarta Sans', sans-serif;
+  --r:        10px;
+  --rs:       6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; font-size: 14px; -webkit-font-smoothing: antialiased; }
+
+/* ── LOGIN ── */
+.login-wrap { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.login-box { width: 340px; background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 32px 28px; }
+.login-logo { width: 44px; height: 44px; background: var(--navy); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; margin: 0 auto 16px; }
+.login-title { font-size: 17px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+.login-sub { font-size: 12px; color: var(--text3); text-align: center; margin-bottom: 24px; }
+.login-label { font-size: 11px; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px; }
+.login-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--rs); padding: 9px 12px; color: var(--text); font-size: 13px; outline: none; margin-bottom: 14px; font-family: var(--sans); transition: border-color .15s; }
+.login-input:focus { border-color: var(--purple); }
+.login-btn { width: 100%; padding: 9px; background: var(--navy); border: none; border-radius: var(--rs); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--sans); transition: background .15s; }
+.login-btn:hover { background: #162d5e; }
+.login-err { font-size: 11px; color: #f87171; text-align: center; min-height: 16px; margin-top: 8px; }
+
+/* ── NAV ── */
+.nav { height: 52px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: rgba(10,11,16,0.92); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.nav-logo { width: 28px; height: 28px; background: var(--navy); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+.nav-title { font-size: 14px; font-weight: 700; }
+.nav-badge { font-size: 10px; background: var(--purplt); color: var(--purple); border: 1px solid rgba(124,92,252,.3); border-radius: 100px; padding: 2px 9px; font-weight: 600; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-user { font-size: 12px; color: var(--text3); font-family: var(--mono); }
+.nav-refresh { padding: 5px 14px; border: 1px solid var(--border2); border-radius: var(--rs); background: transparent; color: var(--text2); font-size: 12px; cursor: pointer; font-family: var(--sans); transition: all .15s; }
+.nav-refresh:hover { background: var(--surface2); color: var(--text); }
+.nav-logout { padding: 5px 14px; border: 1px solid var(--border2); border-radius: var(--rs); background: transparent; color: var(--text3); font-size: 12px; cursor: pointer; font-family: var(--sans); }
+.nav-logout:hover { color: var(--text2); }
+
+/* ── LAYOUT ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 24px; }
+.section-title { font-size: 13px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; display: block; width: 3px; height: 14px; border-radius: 2px; background: var(--purple); }
+
+/* ── OVERVIEW CARDS ── */
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.ov-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 16px; position: relative; overflow: hidden; }
+.ov-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: var(--r) var(--r) 0 0; }
+.ov-card.c-purple::after { background: var(--purple); }
+.ov-card.c-teal::after   { background: var(--teal); }
+.ov-card.c-blue::after   { background: var(--blue); }
+.ov-card.c-amber::after  { background: var(--amber); }
+.ov-card.c-green::after  { background: var(--green); }
+.ov-card.c-red::after    { background: #f87171; }
+.ov-num { font-size: 30px; font-weight: 700; font-family: var(--mono); color: var(--text); }
+.ov-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; }
+.ov-sub { font-size: 11px; color: var(--text2); margin-top: 6px; }
+
+/* ── TWO COL ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+@media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── PANEL ── */
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; }
+.panel-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+.panel-sub { font-size: 11px; color: var(--text3); font-weight: 400; }
+
+/* ── FUNNEL ── */
+.funnel-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.funnel-row:last-child { border-bottom: none; }
+.funnel-label { font-size: 12px; color: var(--text2); width: 90px; flex-shrink: 0; }
+.funnel-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 6px; overflow: hidden; }
+.funnel-bar { height: 100%; border-radius: 3px; transition: width .4s; }
+.funnel-count { font-size: 12px; font-family: var(--mono); color: var(--text); width: 28px; text-align: right; flex-shrink: 0; }
+.funnel-pct { font-size: 10px; color: var(--text3); width: 32px; text-align: right; flex-shrink: 0; }
+
+/* ── SUBREDDIT BARS ── */
+.sub-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.sub-row:last-child { border-bottom: none; }
+.sub-name { font-size: 12px; color: #ff4500; font-family: var(--mono); width: 140px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sub-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 5px; overflow: hidden; }
+.sub-bar { height: 100%; border-radius: 3px; background: #ff4500; opacity: .7; }
+.sub-count { font-size: 12px; font-family: var(--mono); color: var(--text); width: 24px; text-align: right; }
+
+/* ── REPLY TYPE DONUT (CSS only) ── */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.type-card { background: var(--surface2); border-radius: var(--rs); padding: 12px; text-align: center; border: 1px solid var(--border); }
+.type-num { font-size: 22px; font-weight: 700; font-family: var(--mono); }
+.type-lbl { font-size: 10px; color: var(--text3); margin-top: 3px; text-transform: uppercase; letter-spacing: .05em; }
+.type-card.t-helpful .type-num { color: #5ab4e8; }
+.type-card.t-soft .type-num    { color: var(--purple); }
+.type-card.t-direct .type-num  { color: var(--green); }
+
+/* ── ACTIVITY FEED ── */
+.activity-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.activity-item:last-child { border-bottom: none; }
+.activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.activity-dot.d-reddit  { background: #ff4500; }
+.activity-dot.d-linkedin { background: #0a66c2; }
+.activity-main { flex: 1; min-width: 0; }
+.activity-text { font-size: 12px; color: var(--text); line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.activity-meta { font-size: 10px; color: var(--text3); margin-top: 2px; display: flex; gap: 8px; }
+.activity-badge { font-size: 9px; padding: 1px 6px; border-radius: 3px; font-weight: 600; }
+.ab-reddit  { background: rgba(255,69,0,.12); color: #ff4500; }
+.ab-linkedin { background: rgba(10,102,194,.12); color: #4d9de0; }
+.ab-type    { background: var(--purplt); color: var(--purple); }
+
+/* ── MEMBER TABLE ── */
+.member-table { width: 100%; border-collapse: collapse; }
+.member-table th { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border2); }
+.member-table td { font-size: 12px; color: var(--text2); padding: 9px 8px; border-bottom: 1px solid var(--border); }
+.member-table tr:last-child td { border-bottom: none; }
+.member-name-cell { font-weight: 600; color: var(--text); }
+
+/* ── LOADING ── */
+.loading-wrap { text-align: center; padding: 40px; color: var(--text3); font-size: 13px; }
+.spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--purple); border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 10px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── LAST UPDATED ── */
+.last-updated { font-size: 11px; color: var(--text3); font-family: var(--mono); text-align: center; margin-top: 24px; padding-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-box">
+    <div class="login-logo">Z</div>
+    <div class="login-title">Zendt Admin Panel</div>
+    <div class="login-sub">Founder admin access only</div>
+    <div class="login-label">Username</div>
+    <input class="login-input" id="login-user" type="text" placeholder="admin" autocomplete="off">
+    <div class="login-label">Password</div>
+    <input class="login-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="off">
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-logo">Z</div>
+    <span class="nav-title">Admin Panel</span>
+    <span class="nav-badge">Internal</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-user"></span>
+    <button class="nav-refresh" onclick="loadAll()">↻ Refresh</button>
+    <button class="nav-logout" onclick="logout()">Sign out</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page" id="page" style="display:none">
+
+  <!-- OVERVIEW -->
+  <div class="section-title">Overview</div>
+  <div class="overview-grid">
+    <div class="ov-card c-blue">
+      <div class="ov-num" id="ov-linkedin-total">—</div>
+      <div class="ov-lbl">LinkedIn Leads</div>
+      <div class="ov-sub" id="ov-linkedin-sub">total tracked</div>
+    </div>
+    <div class="ov-card c-purple">
+      <div class="ov-num" id="ov-linkedin-connected">—</div>
+      <div class="ov-lbl">Connected</div>
+      <div class="ov-sub">accepted connection</div>
+    </div>
+    <div class="ov-card c-teal">
+      <div class="ov-num" id="ov-linkedin-messaged">—</div>
+      <div class="ov-lbl">Messaged</div>
+      <div class="ov-sub">conversation started</div>
+    </div>
+    <div class="ov-card c-red">
+      <div class="ov-num" id="ov-reddit-replied">—</div>
+      <div class="ov-lbl">Reddit Replied</div>
+      <div class="ov-sub">posts marked as replied</div>
+    </div>
+    <div class="ov-card c-amber">
+      <div class="ov-num" id="ov-reddit-generated">—</div>
+      <div class="ov-lbl">Reddit Generated</div>
+      <div class="ov-sub">AI replies generated</div>
+    </div>
+    <div class="ov-card c-green">
+      <div class="ov-num" id="ov-downloaded">—</div>
+      <div class="ov-lbl">Downloaded</div>
+      <div class="ov-sub">LinkedIn → app downloaded</div>
+    </div>
+  </div>
+
+  <!-- LINKEDIN + REDDIT TOP ROW -->
+  <div class="two-col">
+
+    <!-- LinkedIn Pipeline -->
+    <div class="panel">
+      <div class="panel-title">
+        LinkedIn Outreach Pipeline
+        <span class="panel-sub" id="li-total-sub"></span>
+      </div>
+      <div id="li-funnel">
+        <div class="loading-wrap"><div class="spinner"></div><br>Loading...</div>
+      </div>
+    </div>
+
+    <!-- Reddit by Subreddit -->
+    <div class="panel">
+      <div class="panel-title">
+        Reddit — Replies by Subreddit
+        <span class="panel-sub" id="rd-total-sub"></span>
+      </div>
+      <div id="rd-subreddits">
+        <div class="loading-wrap"><div class="spinner"></div><br>Loading...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REPLY TYPES + TEAM -->
+  <div class="two-col">
+
+    <!-- Reddit reply types -->
+    <div class="panel">
+      <div class="panel-title">Reddit — Reply Types</div>
+      <div class="type-grid" id="rd-types">
+        <div class="type-card t-helpful"><div class="type-num" id="rt-helpful">—</div><div class="type-lbl">Helpful</div></div>
+        <div class="type-card t-soft">   <div class="type-num" id="rt-soft">—</div>   <div class="type-lbl">Soft</div></div>
+        <div class="type-card t-direct"> <div class="type-num" id="rt-direct">—</div> <div class="type-lbl">Direct</div></div>
+      </div>
+      <div style="margin-top:16px">
+        <div class="panel-title" style="font-size:12px;margin-bottom:10px">Team performance</div>
+        <table class="member-table" id="rd-members">
+          <thead><tr><th>Member</th><th>Generated</th><th>Replied</th></tr></thead>
+          <tbody id="rd-members-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LinkedIn team -->
+    <div class="panel">
+      <div class="panel-title">LinkedIn — Lead Stages</div>
+      <table class="member-table">
+        <thead><tr><th>Stage</th><th>Count</th><th>%</th></tr></thead>
+        <tbody id="li-stages-body"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY FEED -->
+  <div class="section-title">Recent Activity</div>
+  <div class="panel">
+    <div id="activity-feed">
+      <div class="loading-wrap"><div class="spinner"></div><br>Loading activity...</div>
+    </div>
+  </div>
+
+  <div class="last-updated" id="last-updated"></div>
+
+</div><!-- /page -->
+
+<script>
+// ── CREDENTIALS ──────────────────────────────────────────────────────────────
+const ADMIN_USERS = {
+  'alen': 'zAl3n@Admin#26'
+};
+
+const SESSION_KEY = 'zendt_admin_auth';
+
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value.trim();
+  const err  = document.getElementById('login-err');
+  if (ADMIN_USERS[user] && ADMIN_USERS[user] === pass) {
+    localStorage.setItem(SESSION_KEY, user);
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('page').style.display = 'block';
+    document.getElementById('nav-user').textContent = user;
+    loadAll();
+  } else {
+    err.textContent = 'Incorrect username or password.';
+    document.getElementById('login-pass').value = '';
+  }
+}
+
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+function checkAuth() {
+  const user = localStorage.getItem(SESSION_KEY);
+  if (user && ADMIN_USERS[user]) {
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('page').style.display = 'block';
+    document.getElementById('nav-user').textContent = user;
+    return true;
+  }
+  return false;
+}
+
+// ── FIREBASE REST ─────────────────────────────────────────────────────────────
+// Reddit data — zendt-marketing-a3354
+const RD_PROJECT = 'zendt-marketing-a3354';
+const RD_KEY     = 'AIzaSyDq7R7w1fdu7-Qh6XV3qFHWC6FAxHwzQRA';
+const RD_BASE    = `https://firestore.googleapis.com/v1/projects/${RD_PROJECT}/databases/(default)/documents`;
+
+// LinkedIn data — zendt-outreach
+const LI_PROJECT = 'zendt-outreach';
+const LI_KEY     = 'AIzaSyCHnVkpFYCJmEJiQ2Oq-gD3DFZj8qIqOxw';
+const LI_BASE    = `https://firestore.googleapis.com/v1/projects/${LI_PROJECT}/databases/(default)/documents`;
+
+async function fsList(base, key, collection, pageSize = 200) {
+  const res = await fetch(`${base}/${collection}?key=${key}&pageSize=${pageSize}`);
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data.documents || []).map(doc => fsToObj(doc));
+}
+
+function fsToObj(doc) {
+  if (!doc?.fields) return {};
+  const obj = { _id: doc.name?.split('/').pop() };
+  for (const [k, v] of Object.entries(doc.fields)) {
+    if ('stringValue'  in v) obj[k] = v.stringValue;
+    else if ('integerValue' in v) obj[k] = parseInt(v.integerValue);
+    else if ('booleanValue' in v) obj[k] = v.booleanValue;
+    else if ('timestampValue' in v) obj[k] = v.timestampValue;
+  }
+  return obj;
+}
+
+function esc(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── DATA LOAD ─────────────────────────────────────────────────────────────────
+let rdReplies = [], rdReplied = [], liLeads = [];
+
+async function loadAll() {
+  // Reset
+  ['ov-linkedin-total','ov-linkedin-connected','ov-linkedin-messaged',
+   'ov-reddit-replied','ov-reddit-generated','ov-downloaded'].forEach(id => {
+    document.getElementById(id).textContent = '—';
+  });
+  document.getElementById('li-funnel').innerHTML      = '<div class="loading-wrap"><div class="spinner"></div><br>Loading...</div>';
+  document.getElementById('rd-subreddits').innerHTML  = '<div class="loading-wrap"><div class="spinner"></div><br>Loading...</div>';
+  document.getElementById('activity-feed').innerHTML  = '<div class="loading-wrap"><div class="spinner"></div><br>Loading...</div>';
+
+  try {
+    [rdReplies, rdReplied, liLeads] = await Promise.all([
+      fsList(RD_BASE, RD_KEY, 'reddit_replies'),
+      fsList(RD_BASE, RD_KEY, 'reddit_replied_posts'),
+      fsList(LI_BASE, LI_KEY, 'leads'),
+    ]);
+  } catch(e) {
+    console.error(e);
+  }
+
+  renderOverview();
+  renderLinkedIn();
+  renderReddit();
+  renderActivity();
+
+  document.getElementById('last-updated').textContent =
+    'Last updated: ' + new Date().toLocaleTimeString('en-IN');
+}
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────────────
+function renderOverview() {
+  const connected  = liLeads.filter(l => ['connected','messaged','downloaded'].includes(l.status)).length;
+  const messaged   = liLeads.filter(l => ['messaged','downloaded'].includes(l.status)).length;
+  const downloaded = liLeads.filter(l => l.status === 'downloaded').length;
+
+  document.getElementById('ov-linkedin-total').textContent     = liLeads.length;
+  document.getElementById('ov-linkedin-connected').textContent  = connected;
+  document.getElementById('ov-linkedin-messaged').textContent   = messaged;
+  document.getElementById('ov-reddit-replied').textContent      = rdReplied.length;
+  document.getElementById('ov-reddit-generated').textContent    = rdReplies.length;
+  document.getElementById('ov-downloaded').textContent          = downloaded;
+
+  const ratio = liLeads.length > 0
+    ? Math.round(connected / liLeads.length * 100) + '% connection rate'
+    : 'no data yet';
+  document.getElementById('ov-linkedin-sub').textContent = ratio;
+}
+
+// ── LINKEDIN ──────────────────────────────────────────────────────────────────
+const STATUS_ORDER = [
+  { v: 'prospect',   l: 'Prospect',   c: '#5ab4e8' },
+  { v: 'invited',    l: 'Invited',    c: '#e8c547' },
+  { v: 'connected',  l: 'Connected',  c: '#7dc96a' },
+  { v: 'messaged',   l: 'Messaged',   c: '#b47de8' },
+  { v: 'downloaded', l: 'Downloaded', c: '#5ae89a' },
+  { v: 'notfit',     l: 'Not a fit',  c: '#556052' },
+];
+
+function renderLinkedIn() {
+  const total = liLeads.length || 1;
+  document.getElementById('li-total-sub').textContent = `${liLeads.length} total leads`;
+
+  // Funnel
+  const counts = {};
+  STATUS_ORDER.forEach(s => counts[s.v] = 0);
+  liLeads.forEach(l => { if (counts[l.status] !== undefined) counts[l.status]++; });
+
+  const max = Math.max(...Object.values(counts), 1);
+  document.getElementById('li-funnel').innerHTML = STATUS_ORDER.map(s => `
+    <div class="funnel-row">
+      <span class="funnel-label">${s.l}</span>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:${Math.round(counts[s.v]/max*100)}%;background:${s.c}"></div>
+      </div>
+      <span class="funnel-count">${counts[s.v]}</span>
+      <span class="funnel-pct">${liLeads.length ? Math.round(counts[s.v]/liLeads.length*100)+'%' : '—'}</span>
+    </div>`).join('');
+
+  // Stages body
+  document.getElementById('li-stages-body').innerHTML = STATUS_ORDER.map(s => `
+    <tr>
+      <td><span style="color:${s.c};font-weight:600">${s.l}</span></td>
+      <td style="font-family:var(--mono)">${counts[s.v]}</td>
+      <td style="font-family:var(--mono);color:var(--text3)">${liLeads.length ? Math.round(counts[s.v]/liLeads.length*100)+'%' : '—'}</td>
+    </tr>`).join('');
+}
+
+// ── REDDIT ────────────────────────────────────────────────────────────────────
+function renderReddit() {
+  // Overview subs
+  document.getElementById('rd-total-sub').textContent = `${rdReplies.length} total replies`;
+
+  // Reply types
+  const types = { helpful: 0, soft: 0, direct: 0 };
+  rdReplies.forEach(r => { if (types[r.type] !== undefined) types[r.type]++; });
+  document.getElementById('rt-helpful').textContent = types.helpful;
+  document.getElementById('rt-soft').textContent    = types.soft;
+  document.getElementById('rt-direct').textContent  = types.direct;
+
+  // Subreddits from replies
+  const subCounts = {};
+  rdReplies.forEach(r => {
+    const s = r.subreddit || 'unknown';
+    subCounts[s] = (subCounts[s] || 0) + 1;
+  });
+  const subSorted = Object.entries(subCounts).sort((a,b) => b[1]-a[1]).slice(0,8);
+  const subMax = subSorted[0]?.[1] || 1;
+
+  document.getElementById('rd-subreddits').innerHTML = subSorted.length > 0
+    ? subSorted.map(([sub, count]) => `
+        <div class="sub-row">
+          <span class="sub-name">r/${esc(sub)}</span>
+          <div class="sub-bar-wrap"><div class="sub-bar" style="width:${Math.round(count/subMax*100)}%"></div></div>
+          <span class="sub-count">${count}</span>
+        </div>`).join('')
+    : '<div style="color:var(--text3);font-size:12px;padding:20px 0">No Reddit data yet</div>';
+
+  // Team members from replies
+  const memberStats = {};
+  rdReplies.forEach(r => {
+    const m = r.memberName || 'Team';
+    if (!memberStats[m]) memberStats[m] = { generated: 0, replied: 0 };
+    memberStats[m].generated++;
+  });
+  rdReplied.forEach(r => {
+    const m = r.memberName || 'Team';
+    if (!memberStats[m]) memberStats[m] = { generated: 0, replied: 0 };
+    memberStats[m].replied++;
+  });
+
+  const memberRows = Object.entries(memberStats).sort((a,b) => b[1].generated - a[1].generated);
+  document.getElementById('rd-members-body').innerHTML = memberRows.length > 0
+    ? memberRows.map(([name, s]) => `
+        <tr>
+          <td class="member-name-cell">${esc(name)}</td>
+          <td style="font-family:var(--mono)">${s.generated}</td>
+          <td style="font-family:var(--mono)">${s.replied}</td>
+        </tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--text3);font-size:12px;padding:12px 0">No data yet</td></tr>';
+}
+
+// ── ACTIVITY FEED ─────────────────────────────────────────────────────────────
+function renderActivity() {
+  // Combine Reddit and LinkedIn activity
+  const items = [];
+
+  rdReplies.slice(0, 20).forEach(r => {
+    items.push({
+      type: 'reddit',
+      text: r.postTitle || 'Reddit post',
+      sub: `r/${r.subreddit || '?'} · ${r.memberName || 'Team'} · ${r.type || ''} reply`,
+      ts: r.createdAt || '',
+      badge: r.type || 'helpful'
+    });
+  });
+
+  liLeads.slice(0, 20).forEach(l => {
+    items.push({
+      type: 'linkedin',
+      text: `${l.name || 'Lead'} — ${l.role || ''}`,
+      sub: `${l.location || 'India'} · Status: ${l.status || 'prospect'}`,
+      ts: l.createdAt ? new Date(l.createdAt).toISOString() : '',
+      badge: l.status || 'prospect'
+    });
+  });
+
+  // Sort by timestamp descending
+  items.sort((a, b) => {
+    const ta = a.ts ? new Date(a.ts).getTime() : 0;
+    const tb = b.ts ? new Date(b.ts).getTime() : 0;
+    return tb - ta;
+  });
+
+  const top30 = items.slice(0, 30);
+
+  if (top30.length === 0) {
+    document.getElementById('activity-feed').innerHTML =
+      '<div style="color:var(--text3);font-size:12px;padding:20px">No activity yet. Start using the tools to see data here.</div>';
+    return;
+  }
+
+  document.getElementById('activity-feed').innerHTML = top30.map(item => {
+    const timeStr = item.ts ? new Date(item.ts).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+    const badgeClass = item.type === 'reddit' ? 'ab-reddit' : 'ab-linkedin';
+    const typeClass  = item.type === 'reddit' ? 'ab-type' : '';
+    return `<div class="activity-item">
+      <div class="activity-dot d-${item.type}"></div>
+      <div class="activity-main">
+        <div class="activity-text">${esc(item.text)}</div>
+        <div class="activity-meta">
+          <span>${esc(item.sub)}</span>
+          <span>${timeStr}</span>
+        </div>
+      </div>
+      <span class="activity-badge ${badgeClass}">${item.type === 'reddit' ? 'Reddit' : 'LinkedIn'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── KEYBOARD ──────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-wrap').style.display !== 'none') doLogin();
+});
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+if (!checkAuth()) {
+  document.getElementById('page').style.display = 'none';
+}
+</script>
+</body>
+</html>

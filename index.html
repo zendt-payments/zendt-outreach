@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zendt Outreach</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0f1117;
+    --surface:   #161b27;
+    --surface2:  #1d2436;
+    --surface3:  #252d42;
+    --border:    #2a3450;
+    --border2:   #364060;
+    --accent:    #4f8ef7;
+    --accent-dim: rgba(79,142,247,0.15);
+    --accent-glow: rgba(79,142,247,0.08);
+    --green:     #34d399;
+    --green-dim: rgba(52,211,153,0.15);
+    --amber:     #fbbf24;
+    --amber-dim: rgba(251,191,36,0.12);
+    --red:       #f87171;
+    --violet:    #a78bfa;
+    --violet-dim: rgba(167,139,250,0.15);
+    --blue:       #4f8ef7;
+    --blue-dim:   rgba(79,142,247,0.15);
+    --text:      #f1f5f9;
+    --text2:     #b0bcd4;
+    --text3:     #6b7fa3;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Plus Jakarta Sans', sans-serif;
+    --radius:    10px;
+    --radius-sm: 6px;
+    --shadow:    0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.2);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── TOPNAV ── */
+  .topnav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(15,17,23,0.92);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: #0f1117;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--border2);
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text3);
+    margin-left: 2px;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .nav-tab {
+    padding: 5px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text3);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-tab.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 6px rgba(79,142,247,0.35);
+  }
+
+  .nav-tab:hover:not(.active) { color: var(--text2); background: var(--surface3); }
+
+  .api-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+  }
+
+  .api-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border2);
+    transition: all 0.3s;
+  }
+
+  .api-dot.connected {
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(52,211,153,0.5);
+  }
+
+  /* ── SETUP BAR ── */
+  .setup-bar {
+    padding: 10px 24px;
+    background: rgba(251,191,36,0.05);
+    border-bottom: 1px solid rgba(251,191,36,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--amber);
+    font-family: var(--mono);
+  }
+
+  .setup-bar input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .setup-bar input:focus { border-color: rgba(251,191,36,0.4); }
+
+  .setup-bar button {
+    padding: 7px 16px;
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: var(--radius-sm);
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+
+  .setup-bar button:hover { background: rgba(251,191,36,0.18); }
+
+  /* ── LAYOUT ── */
+  .app { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 52px); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  /* ── STATS GRID ── */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 12px 12px;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--border2); background: var(--surface3); transform: translateY(-1px); }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-card.active { border-color: var(--accent); background: var(--accent-glow); }
+  .stat-card.active::before { opacity: 1; }
+
+  .stat-card.s-total::before { background: linear-gradient(90deg, var(--accent), #7c3aed); }
+  .stat-card.s-connected::before { background: var(--green); }
+  .stat-card.s-messaged::before { background: var(--amber); }
+  .stat-card.s-converted::before { background: var(--violet); }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 5px;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.03em;
+    font-weight: 500;
+  }
+
+  .stat-card.s-total .stat-num { color: var(--text); }
+  .stat-card.s-connected .stat-num { color: var(--green); }
+  .stat-card.s-messaged .stat-num { color: var(--amber); }
+  .stat-card.s-converted .stat-num { color: var(--violet); }
+
+  /* ── PIPELINE LIST ── */
+  .pipeline { display: flex; flex-direction: column; gap: 2px; }
+
+  .pipe-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .pipe-item:hover { background: var(--surface2); }
+
+  .pipe-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 9px;
+    flex-shrink: 0;
+  }
+
+  .pipe-left { display: flex; align-items: center; }
+
+  .pipe-name {
+    font-size: 12px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .pipe-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    background: var(--surface3);
+    padding: 1px 7px;
+    border-radius: 20px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  /* ── ADD LEAD BTN ── */
+  .add-btn {
+    margin: 14px 16px;
+    padding: 10px 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    box-shadow: 0 2px 8px rgba(79,142,247,0.3);
+  }
+
+  .add-btn:hover {
+    background: #3d7ef5;
+    box-shadow: 0 4px 16px rgba(79,142,247,0.45);
+    transform: translateY(-1px);
+  }
+
+  /* ── MAIN ── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .view.active { display: flex; }
+
+  /* ── LEADS TOOLBAR ── */
+  .leads-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .search-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  .search-box {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 14px 8px 34px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    outline: none;
+    transition: all 0.15s;
+  }
+
+  .search-box::placeholder { color: var(--text3); }
+  .search-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,0.1); }
+
+  .filter-btn {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text3);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { color: var(--text2); border-color: var(--border2); background: var(--surface2); }
+
+  .filter-btn.active {
+    background: var(--accent-dim);
+    border-color: rgba(79,142,247,0.3);
+    color: var(--accent);
+  }
+
+  .export-btn {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text3);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .export-btn:hover { color: var(--green); border-color: rgba(52,211,153,0.3); background: var(--green-dim); }
+
+  /* ── LEADS TABLE ── */
+  .leads-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px 24px;
+  }
+
+  .leads-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .leads-table th {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 8px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    font-weight: 500;
+  }
+
+  .lead-row {
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .lead-row:hover { background: var(--surface); }
+  .lead-row:hover td:first-child { color: var(--accent); }
+
+  .lead-row td {
+    padding: 12px 14px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .lead-name {
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lead-role {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  .lead-location {
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* ── STATUS BADGES ── */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  .status-badge::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+
+  .s-prospect   { background: rgba(79,142,247,0.1);  color: #6baef9; border: 1px solid rgba(79,142,247,0.2); }
+  .s-prospect::before   { background: #6baef9; }
+  .s-invited    { background: rgba(251,191,36,0.1);  color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+  .s-invited::before    { background: var(--amber); }
+  .s-connected  { background: rgba(52,211,153,0.1);  color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+  .s-connected::before  { background: var(--green); }
+  .s-messaged   { background: rgba(167,139,250,0.1); color: var(--violet); border: 1px solid rgba(167,139,250,0.2); }
+  .s-messaged::before   { background: var(--violet); }
+  .s-waitlisted { background: rgba(52,211,153,0.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
+  .s-waitlisted::before { background: #6ee7b7; }
+  .s-notfit     { background: rgba(255,255,255,0.03); color: var(--text3); border: 1px solid var(--border); }
+  .s-notfit::before     { background: var(--text3); }
+
+  /* ── FIT TAGS ── */
+  .fit-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .fit-strong  { background: rgba(52,211,153,0.12); color: var(--green); }
+  .fit-possible { background: rgba(251,191,36,0.1); color: var(--amber); }
+  .fit-no      { background: rgba(255,255,255,0.04); color: var(--text3); }
+
+  /* ── ACTION BTN ── */
+  .action-btn {
+    padding: 5px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .action-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--text3);
+  }
+
+  .empty-state .big { font-size: 40px; margin-bottom: 14px; opacity: 0.4; }
+  .empty-state p { font-size: 13px; color: var(--text3); }
+  .empty-state .em-title { font-size: 15px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+
+  /* ── AI VIEW ── */
+  .ai-view { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+  .ai-view.active { display: flex; }
+
+  .ai-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ai-mode-switch {
+    display: flex;
+    gap: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .ai-mode-btn {
+    padding: 6px 16px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--text3);
+    transition: all 0.15s;
+  }
+
+  .ai-mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(79,142,247,0.3);
+  }
+
+  .ai-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .ai-input-panel {
+    width: 360px;
+    min-width: 360px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    gap: 14px;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+
+  .ai-output-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    overflow-y: auto;
+    gap: 14px;
+    background: var(--bg);
+  }
+
+  .panel-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  textarea.ai-textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    transition: all 0.15s;
+    min-height: 220px;
+  }
+
+  textarea.ai-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+  }
+
+  textarea.ai-textarea::placeholder { color: var(--text3); }
+
+  .run-btn {
+    padding: 11px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    box-shadow: 0 2px 8px rgba(79,142,247,0.3);
+  }
+
+  .run-btn:hover { background: #3d7ef5; box-shadow: 0 4px 16px rgba(79,142,247,0.4); }
+  .run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── OUTPUT BLOCKS ── */
+  .out-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .out-block-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface2);
+  }
+
+  .out-block-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .copy-btn {
+    padding: 3px 10px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    letter-spacing: 0.05em;
+  }
+
+  .copy-btn:hover { color: var(--accent); border-color: rgba(79,142,247,0.4); }
+
+  .out-block-body {
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-wrap;
+    font-family: var(--mono);
+  }
+
+  .out-block-body.highlight { color: var(--text); }
+
+  .char-count { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+  .char-warn { color: var(--red); }
+
+  .placeholder-msg {
+    text-align: center;
+    color: var(--text3);
+    padding: 60px 24px;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .loading-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .loading-dots { display: flex; gap: 4px; }
+  .ld { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); animation: ldp 1.2s ease-in-out infinite; opacity: 0.3; }
+  .ld:nth-child(2){ animation-delay:.2s } .ld:nth-child(3){ animation-delay:.4s }
+  @keyframes ldp { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    width: 520px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.2s ease;
+  }
+
+  @keyframes slideUp { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 22px;
+    letter-spacing: -0.01em;
+  }
+
+  .form-group { margin-bottom: 16px; }
+
+  .form-label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    outline: none;
+    transition: all 0.15s;
+  }
+
+  .form-input:focus, .form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+  }
+
+  .form-select { cursor: pointer; }
+  option { background: var(--surface2); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-cancel {
+    padding: 9px 20px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .btn-cancel:hover { border-color: var(--red); color: var(--red); }
+
+  .btn-save {
+    padding: 9px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 2px 6px rgba(79,142,247,0.3);
+  }
+
+  .btn-save:hover { background: #3d7ef5; }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    position: fixed;
+    right: 0; top: 52px; bottom: 0;
+    width: 420px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 150;
+    display: none;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: -8px 0 32px rgba(0,0,0,0.3);
+  }
+
+  .detail-panel.open {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .detail-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    background: var(--surface2);
+  }
+
+  .detail-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+
+  .detail-role {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .close-btn {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+
+  .close-btn:hover { color: var(--text); border-color: var(--border2); }
+
+  .detail-body { padding: 18px; overflow-y: auto; flex: 1; }
+
+  .detail-section { margin-bottom: 20px; }
+
+  .detail-section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .detail-notes {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+    font-family: var(--mono);
+    min-height: 80px;
+    resize: vertical;
+    width: 100%;
+    outline: none;
+    transition: all 0.15s;
+  }
+
+  .detail-notes:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,0.1); }
+
+  /* ── STATUS OPTIONS ── */
+  .status-select-group { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .status-option {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    transition: all 0.12s;
+  }
+
+  .status-option:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .status-option.sel { border-color: rgba(79,142,247,0.5); color: var(--accent); background: var(--accent-dim); }
+
+  /* ── SAVE NOTES BTN ── */
+  .save-notes-btn {
+    padding: 8px 16px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.12s;
+  }
+
+  .save-notes-btn:hover { background: rgba(79,142,247,0.18); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* ── STAGE INDICATOR ── */
+  .stage-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    background: rgba(79,142,247,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.2);
+    font-weight: 500;
+  }
+
+  /* ── ADD LEAD BANNER ── */
+  .add-lead-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: var(--radius);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 4px;
+  }
+
+  .add-lead-banner:hover { background: rgba(52,211,153,0.14); }
+  .add-lead-banner.already { background: rgba(255,255,255,0.02); border-color: var(--border); color: var(--text3); cursor: default; }
+
+  /* ── DETAIL PANEL ADDITIONS ── */
+  .dp-url-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 3px 9px;
+    border: 1px solid rgba(79,142,247,0.2);
+    border-radius: 5px;
+    background: var(--accent-glow);
+    transition: all 0.12s;
+    margin-top: 5px;
+  }
+
+  .dp-url-link:hover { background: var(--accent-dim); border-color: rgba(79,142,247,0.4); }
+
+  .last-contact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .last-contact-label {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .mark-contacted-btn {
+    padding: 4px 11px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 5px;
+    color: var(--text3);
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+
+  .mark-contacted-btn:hover { border-color: rgba(52,211,153,0.4); color: var(--green); }
+
+  .follow-up-alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(251,191,36,0.07);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--amber);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  /* ── STAGE SELECTOR ── */
+  .stage-select-group { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .stage-opt {
+    padding: 4px 11px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    transition: all 0.12s;
+  }
+
+  .stage-opt:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+  .stage-opt.sel { border-color: rgba(79,142,247,0.5); color: var(--accent); background: var(--accent-dim); }
+
+  /* ── MESSAGE LOG ── */
+  .msg-log { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
+
+  .msg-entry {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    transition: border-color 0.12s;
+  }
+
+  .msg-entry:hover { border-color: var(--border2); }
+
+  .msg-entry-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .msg-entry-type {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .msg-entry-date {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text3);
+  }
+
+  .msg-entry-text {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+
+  .msg-delete-btn {
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0 3px;
+    transition: color 0.12s;
+    margin-left: 6px;
+  }
+
+  .msg-delete-btn:hover { color: var(--red); }
+
+  .add-msg-area { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
+
+  .add-msg-area textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    transition: all 0.15s;
+    min-height: 70px;
+  }
+
+  .add-msg-area textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,0.1); }
+
+  .add-msg-row { display: flex; gap: 7px; align-items: center; }
+
+  .msg-type-sel {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 9px;
+    outline: none;
+    cursor: pointer;
+    flex: 1;
+    transition: border-color 0.15s;
+  }
+
+  .msg-type-sel:focus { border-color: var(--accent); }
+
+  .log-msg-btn {
+    padding: 7px 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .log-msg-btn:hover { background: #3d7ef5; }
+
+  /* ── STALE DOT ── */
+  .stale-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── LOGIN SCREEN ── */
+  .login-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 40px 36px;
+    width: 380px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .login-logo {
+    width: 72px; height: 72px;
+    background: #0f1117;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .login-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  .login-sub {
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 32px;
+  }
+
+  .login-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+    align-self: flex-start;
+    width: 100%;
+  }
+
+  .login-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.2em;
+    transition: all 0.15s;
+    margin-bottom: 14px;
+  }
+
+  .login-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,247,0.15);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 2px 10px rgba(79,142,247,0.35);
+    letter-spacing: 0.01em;
+  }
+
+  .login-btn:hover {
+    background: #3d7ef5;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.45);
+    transform: translateY(-1px);
+  }
+
+  .login-error {
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 500;
+    margin-top: 10px;
+    min-height: 18px;
+    text-align: center;
+  }
+
+  .login-footer {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 24px;
+    text-align: center;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="logo.png" alt="Zendt" style="width:60px;height:60px;object-fit:contain;filter:invert(1)" />
+    </div>
+    <div class="login-title">Zendt Outreach</div>
+    <div class="login-sub">Internal sales tool</div>
+    <div class="login-label">Passphrase</div>
+    <input
+      class="login-input"
+      id="login-input"
+      type="password"
+      placeholder="••••••••"
+      autocomplete="current-password"
+    />
+    <button class="login-btn" id="login-btn">Sign In</button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-footer">Zendt Payments · Internal use only</div>
+  </div>
+</div>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="logo">
+    <div class="logo-icon">
+      <img src="logo.png" alt="Zendt" style="width:18px;height:18px;object-fit:contain;filter:invert(1)" />
+    </div>
+    Zendt
+    <span class="logo-sub">/ Outreach</span>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchView('leads')">Leads</div>
+    <div class="nav-tab" onclick="switchView('ai')">AI Assistant</div>
+    <div class="nav-tab" onclick="switchView('posts')">Post Generator</div>
+  </div>
+  <div class="api-status">
+    <div class="api-dot connected" id="api-dot"></div>
+    <span id="api-status-text">CONNECTED</span>
+  </div>
+</nav>
+
+<!-- SETUP BAR hidden - key is server-side -->
+<div class="setup-bar" id="setup-bar" style="display:none">
+  <span>⚠ API key required for AI features</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
+  <button onclick="saveApiKey()">Connect</button>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Pipeline</div>
+      <div class="stats-grid">
+        <div class="stat-card s-total" onclick="filterLeads('all')">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-card s-connected" onclick="filterLeads('connected')">
+          <div class="stat-num" id="stat-connected">0</div>
+          <div class="stat-label">Connected</div>
+        </div>
+        <div class="stat-card s-messaged" onclick="filterLeads('messaged')">
+          <div class="stat-num" id="stat-messaged">0</div>
+          <div class="stat-label">Messaged</div>
+        </div>
+        <div class="stat-card s-converted" onclick="filterLeads('waitlisted')">
+          <div class="stat-num" id="stat-converted">0</div>
+          <div class="stat-label">Waitlisted</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">By Stage</div>
+      <div class="pipeline" id="pipeline-list"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">By Fit</div>
+      <div class="pipeline">
+        <div class="pipe-item" onclick="filterLeads('fit-strong')">
+          <div class="pipe-left">
+            <div class="pipe-dot" style="background:var(--green)"></div>
+            <span class="pipe-name">Strong fit</span>
+          </div>
+          <span class="pipe-count" id="fit-strong-count">0</span>
+        </div>
+        <div class="pipe-item" onclick="filterLeads('fit-possible')">
+          <div class="pipe-left">
+            <div class="pipe-dot" style="background:var(--amber)"></div>
+            <span class="pipe-name">Possible fit</span>
+          </div>
+          <span class="pipe-count" id="fit-possible-count">0</span>
+        </div>
+        <div class="pipe-item" onclick="filterLeads('fit-no')">
+          <div class="pipe-left">
+            <div class="pipe-dot" style="background:var(--text3)"></div>
+            <span class="pipe-name">Not a fit</span>
+          </div>
+          <span class="pipe-count" id="fit-no-count">0</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="add-btn" onclick="openAddModal()">+ Add Lead</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- LEADS VIEW -->
+    <div class="view active" id="view-leads">
+      <div class="leads-toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="search-box" id="search-input" placeholder="Search by name, role, location..." oninput="renderLeads()" />
+        </div>
+        <button class="filter-btn active" id="filter-all" onclick="filterLeads('all')">All</button>
+        <button class="filter-btn" id="filter-invited" onclick="filterLeads('invited')">Invited</button>
+        <button class="filter-btn" id="filter-connected" onclick="filterLeads('connected')">Connected</button>
+        <button class="filter-btn" id="filter-messaged" onclick="filterLeads('messaged')">Messaged</button>
+        <button class="export-btn" onclick="exportCSV()">↓ Export CSV</button>
+      </div>
+      <div class="leads-list">
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Fit</th>
+              <th>Stage</th>
+              <th>Last Contact</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody"></tbody>
+        </table>
+        <div id="empty-state" class="empty-state" style="display:none">
+          <div class="big">◎</div>
+          <div class="em-title">No leads yet</div>
+          <p>Add your first lead to start tracking outreach.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI VIEW -->
+    <div class="ai-view" id="view-ai">
+      <div class="ai-header">
+        <div class="ai-mode-switch">
+          <div class="ai-mode-btn active" id="mode-profile" onclick="switchMode('profile')">Profile Analysis</div>
+          <div class="ai-mode-btn" id="mode-convo" onclick="switchMode('convo')">Conversation Reply</div>
+        </div>
+        <span style="font-size:12px;color:var(--text3);margin-left:6px" id="mode-hint">Paste a LinkedIn profile to get fit assessment, connection note, and first DM</span>
+      </div>
+
+      <div class="ai-body">
+        <div class="ai-input-panel">
+          <div class="panel-label">Input</div>
+          <textarea class="ai-textarea" id="ai-input" placeholder="Paste LinkedIn profile text or conversation thread here..."></textarea>
+
+          <div class="form-group" id="lead-link-group">
+            <label class="form-label">Save result to lead (optional)</label>
+            <select class="form-select" id="lead-link-select">
+              <option value="">-- select a lead --</option>
+            </select>
+          </div>
+
+          <button class="run-btn" id="run-btn" onclick="runAI()">Run Analysis</button>
+        </div>
+
+        <div class="ai-output-panel" id="ai-output">
+          <div class="placeholder-msg">
+            Paste a profile or conversation on the left<br>and hit Run Analysis to get started.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- POST GENERATOR VIEW -->
+<div id="view-posts" style="display:none;flex:1;overflow:auto;padding:24px;gap:24px;flex-direction:column;">
+  <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+    <div style="flex:1;min-width:200px;">
+      <div style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">Post Type</div>
+      <select id="post-type" class="form-select" style="width:100%;">
+        <option value="pain">Freelancer Pain Point</option>
+        <option value="product">Zendt Product Post</option>
+      </select>
+    </div>
+    <div style="flex:2;min-width:260px;">
+      <div style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">Topic / Angle (optional)</div>
+      <input id="post-topic" class="form-input" placeholder="e.g. PayPal fees eating into earnings, receiving GCC payments..." style="width:100%;" />
+    </div>
+    <button onclick="generatePost()" class="run-btn" id="post-btn" style="white-space:nowrap;padding:10px 28px;">Generate Post</button>
+  </div>
+
+  <div id="post-output" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;">
+    <div style="font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;">Generated Post</div>
+    <div id="post-content" style="font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="copyPost()" style="background:var(--accent-dim);color:var(--accent);border:1px solid rgba(79,142,247,0.3);border-radius:7px;padding:8px 20px;font-size:12px;cursor:pointer;font-family:inherit;">Copy Post</button>
+      <button onclick="generatePost()" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:7px;padding:8px 20px;font-size:12px;cursor:pointer;font-family:inherit;">Regenerate</button>
+    </div>
+  </div>
+
+  <div id="post-placeholder" style="color:var(--text3);font-size:13px;margin-top:8px;">Select a post type, add an optional angle, and hit Generate Post.</div>
+</div>
+
+<!-- ADD LEAD MODAL -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-title">Add New Lead</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Name *</label>
+        <input class="form-input" id="f-name" placeholder="Arjun Mehta" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input class="form-input" id="f-location" placeholder="Mumbai, India" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role / Headline</label>
+      <input class="form-input" id="f-role" placeholder="UI/UX Designer | Freelancer" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">LinkedIn URL</label>
+      <input class="form-input" id="f-url" placeholder="linkedin.com/in/..." />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="f-status">
+          <option value="prospect">Prospect</option>
+          <option value="invited">Invitation Sent</option>
+          <option value="connected">Connected</option>
+          <option value="messaged">Messaged</option>
+          <option value="waitlisted">Waitlisted</option>
+          <option value="notfit">Not a Fit</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fit</label>
+        <select class="form-select" id="f-fit">
+          <option value="strong">Strong fit</option>
+          <option value="possible">Possible fit</option>
+          <option value="no">Not a fit</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea class="form-input" id="f-notes" rows="3" placeholder="Any context about this lead..." style="resize:vertical"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+      <button class="btn-save" onclick="saveLead()">Save Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEAD DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-header">
+    <div>
+      <div class="detail-name" id="dp-name"></div>
+      <div class="detail-role" id="dp-role"></div>
+      <a class="dp-url-link" id="dp-url-link" href="#" target="_blank" style="display:none">↗ Open LinkedIn</a>
+    </div>
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="detail-body">
+    <div class="detail-section">
+      <div class="detail-section-label">Status</div>
+      <div class="status-select-group" id="dp-status-group"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-label">Fit Assessment</div>
+      <div class="status-select-group" id="dp-fit-group"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-label">Conversation Stage</div>
+      <div class="stage-select-group" id="dp-stage-group"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-label">Last Contacted</div>
+      <div class="last-contact-row">
+        <span class="last-contact-label" id="dp-last-contact">Never</span>
+        <button class="mark-contacted-btn" onclick="markContacted()">Mark contacted today</button>
+      </div>
+      <div id="dp-followup-alert"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-label">Message Log</div>
+      <div class="msg-log" id="dp-msg-log"></div>
+      <div class="add-msg-area">
+        <textarea id="dp-msg-input" placeholder="Paste message sent or received..."></textarea>
+        <div class="add-msg-row">
+          <select class="msg-type-sel" id="dp-msg-type">
+            <option value="sent">Sent</option>
+            <option value="received">Received</option>
+            <option value="note">Internal note</option>
+          </select>
+          <button class="log-msg-btn" onclick="logMessage()">Log</button>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-label">Notes</div>
+      <textarea class="detail-notes" id="dp-notes" placeholder="Add notes about this lead..."></textarea>
+      <button class="save-notes-btn" onclick="saveDetailNotes()">Save Notes</button>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-label">Actions</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="action-btn" onclick="analyzeThisLead()" style="padding:7px 14px">Analyze Profile</button>
+        <button class="action-btn" onclick="replyThisLead()" style="padding:7px 14px">Suggest Reply</button>
+        <button class="action-btn" onclick="deleteLead()" style="padding:7px 14px;color:var(--red);border-color:rgba(248,113,113,0.3)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCHnVkpFYCJmEJiQ2Oq-gD3DFZj8qIqOxw",
+  authDomain: "zendt-outreach.firebaseapp.com",
+  projectId: "zendt-outreach",
+  storageBucket: "zendt-outreach.firebasestorage.app",
+  messagingSenderId: "484106125745",
+  appId: "1:484106125745:web:a3aaf7b8168c5a39e3bd90"
+};
+
+const _app = initializeApp(firebaseConfig);
+const _db = getFirestore(_app);
+const _col = collection(_db, 'leads');
+
+// Expose Firebase ops to global scope for the main script
+window._fbSave = (lead) => setDoc(doc(_db, 'leads', lead.id), lead);
+window._fbDelete = (id) => deleteDoc(doc(_db, 'leads', id));
+window._fbListen = (cb) => onSnapshot(_col, snap => cb(snap.docs.map(d => d.data())));
+window._fbReady = true;
+</script>
+
+<script>
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let leads = [];
+let apiKey = localStorage.getItem('zendt_api_key') || '';
+let currentFilter = 'all';
+let currentMode = 'profile';
+let activeLeadId = null;
+
+const STATUSES = [
+  { v: 'prospect', l: 'Prospect', c: '#5ab4e8' },
+  { v: 'invited', l: 'Invited', c: '#e8c547' },
+  { v: 'connected', l: 'Connected', c: '#7dc96a' },
+  { v: 'messaged', l: 'Messaged', c: '#b47de8' },
+  { v: 'downloaded', l: 'Downloaded', c: '#5ae89a' },
+  { v: 'notfit', l: 'Not a Fit', c: '#556052' }
+];
+
+const SYSTEM_PROFILE = "You are a LinkedIn outreach assistant for Zendt Payments.\n\n" +
+"ABOUT ZENDT PAYMENTS (current — use only these facts):\n" +
+"- Payment app LIVE on App Store and Play Store — built for Indian freelancers\n" +
+"- One payment link: client pays by UPI, cards, or net banking — any method\n" +
+"- First Rs.25,000 in transactions: zero platform fee (cashback every Monday to user bank)\n" +
+"- Zero subscription. Ever. Only pay when you get paid.\n" +
+"- International payments coming soon: GCC (AED, SAR, QAR), USD, GBP, EUR and 150+ currencies\n" +
+"- 4% flat fee for international. Competitors charge 7-9%: PayPal (7-8% effective), Skydo (5% US only), Briskpe (8.5-9.5%)\n" +
+"- Target: Indian freelancers, pan-India, age 18+, all types (designers, developers, writers, marketers, creators, consultants)\n" +
+"- Founded by Alen Thomas — freelancer who personally lost money on GCC payments for 6 years\n" +
+"- Download at zendtpayments.com\n\n" +
+"PAIN ANGLES:\n" +
+"- Domestic: sharing personal UPI ID on WhatsApp, no professional payment page, client cant pay by card\n" +
+"- International: losing 7-9% on PayPal/Wise, GCC clients have no clean way to pay Indian freelancers\n" +
+"- All freelancers: no platform built specifically for how Indian freelancers work\n\n" +
+"When given a LinkedIn profile output EXACTLY this structure with no extra text:\n\n" +
+"NAME: [Full name only]\n" +
+"ROLE: [Their headline or role in one line]\n" +
+"LOCATION: [City, State/Country if mentioned, else blank]\n" +
+"FIT: [Strong fit / Possible fit / Not a fit]\n" +
+"PROFILE_READ: [2-3 sentences: who they are, what they do, client geography, one personal detail]\n" +
+"CONNECTION_NOTE: [Under 300 characters. A genuine one-line observation about something SPECIFIC from their profile — a project, a niche they serve, a career move, a specific client type, or a post THEY wrote about their own work. NEVER reference hiring posts, job sharing posts, or posts where they are helping someone else find a job — only reference their own work and experience. Never mention Zendt, payments, or fees. Never use words like: passion, journey, inspiring, innovative, impact, connect, opportunity, resonate, game-changer. Write like a real person texting, not a marketer. No em dashes.]\n" +
+"FIRST_DM: [Under 3 sentences. Reference their specific niche or a real detail from their profile. Ask one genuine curious question about their work. Zero mention of payments, fees, or Zendt. Sound like a colleague, not a salesperson. No em dashes.]\n\n" +
+"Rules: No em dashes anywhere ever. No hype words. No generic flattery. Output only the seven labeled fields above.";
+
+const SYSTEM_CONVO = "You are a LinkedIn outreach assistant for Zendt Payments.\n\n" +
+"ABOUT ZENDT PAYMENTS (current — use only these facts):\n" +
+"- Payment app LIVE on App Store and Play Store — built for Indian freelancers\n" +
+"- One payment link: client pays by UPI, cards, or net banking — any method\n" +
+"- First Rs.25,000 in transactions: zero platform fee (cashback every Monday)\n" +
+"- Zero subscription. Ever. Only pay when you get paid.\n" +
+"- International payments coming soon: GCC (AED, SAR, QAR), USD, GBP, EUR, 150+ currencies at 4% flat\n" +
+"- Competitors charge 7-9%: PayPal (7-8% effective), Skydo (5%, US only), Briskpe (8.5-9.5%)\n" +
+"- Download at zendtpayments.com\n" +
+"- Never say pre-launch or waitlist — the app is LIVE\n\n" +
+"CONVERSATION STAGES:\n" +
+"Stage 1 (msgs 1-3): Genuine curiosity. Ask about their work. No payments, no Zendt.\n" +
+"Stage 2 (msgs 3-5): Understand their world. Client mix, how they work. Still no payments.\n" +
+"Stage 3 (msgs 5-7): Uncover the pain. Ask how they handle payments. Let them describe friction.\n" +
+"Stage 4: Introduce Zendt ONLY after they have explicitly said fees or conversion are a problem in their own words. One sentence max about Zendt. Natural mention with the download link zendtpayments.com. Never combine Zendt mention with a sales paragraph.\n" +
+"Stage 5: Handle response. Warm close. Never aggressive.\n\n" +
+"CRITICAL RULES FOR STAGE 4:\n" +
+"- NEVER introduce Zendt just because they mentioned using PayPal or payment platforms. That is not pain — that is just information.\n" +
+"- ONLY introduce Zendt if they have explicitly said something like 'fees are high', 'I lose money on conversion', 'it's frustrating', or similar words showing real frustration.\n" +
+"- If they say fees are manageable or they have it under control — do NOT mention Zendt. Stay in Stage 3 and ask a follow-up.\n" +
+"- Never mention Zendt by name, give fee percentages, explain product features, and drop a waitlist link all in the same message. That is a sales pitch and will destroy the relationship.\n" +
+"- The Zendt mention should feel like a friend saying 'oh I actually know something that might help' — not a product pitch.\n" +
+"- One idea per message. Either mention Zendt briefly OR give the link. Never both in one message.\n\n" +
+"PAIN ANGLES:\n" +
+"- International clients: fee loss on PayPal/Wise/Payoneer, GCC currency gaps\n" +
+"- Domestic clients: payment collection friction, mixing personal and work expenses\n" +
+"- All freelancers: managing freelance finances in one place\n\n" +
+"Rules: No em dashes anywhere ever. No hype words. One reply, short, conversational. Never pitch before explicit pain. Never send waitlist link before Stage 4. Match their tone exactly.\n\n" +
+"Output EXACTLY this structure:\n" +
+"STATUS: [One line: which stage, what the goal of this reply is]\n" +
+"STAGE: [1, 2, 3, 4, or 5]\n" +
+"REPLY: [Ready to copy-paste message, no quotes]";
+
+const SYSTEM_POST = "You are a LinkedIn post writer and optimizer for Nidhish Reghunath, a team member at Zendt Payments.\n\n" +
+"ABOUT ZENDT PAYMENTS (current — use only these facts):\n" +
+"- Payment app LIVE on App Store and Play Store — built for Indian freelancers\n" +
+"- One payment link: client pays by UPI, cards, or net banking — any method\n" +
+"- First Rs.25,000 in transactions: zero platform fee (cashback every Monday)\n" +
+"- Zero subscription. Ever. Only pay when you get paid.\n" +
+"- International payments coming soon: GCC (AED, SAR, QAR), USD, GBP, EUR, 150+ currencies at 4% flat\n" +
+"- Competitors charge 7-9%: PayPal (7-8% effective), Skydo (5% US only), Briskpe (8.5-9.5%)\n" +
+"- Pan-India, all freelancer types, age 18+\n" +
+"- Founded by Alen Thomas — freelancer who lost money on GCC payments for 6 years\n" +
+"- Download at zendtpayments.com — never say waitlist or pre-launch\n\n" +
+"NIDHISH'S VOICE:\n" +
+"- First-person, warm, observational, curious\n" +
+"- Writes like someone who genuinely cares about freelancers, not a marketer\n" +
+"- Short punchy sentences. No corporate speak.\n" +
+"- Never uses: 'excited', 'thrilled', 'game-changer', 'innovative', 'passionate', 'journey', 'inspiring'\n" +
+"- No em dashes. No excessive exclamation marks.\n" +
+"- Ends posts with a soft question or reflection that invites comments\n\n" +
+"POST TYPES:\n\n" +
+"PAIN POST: About the real struggle Indian freelancers face with international payments.\n" +
+"- Tell a story or observation, not a pitch\n" +
+"- Make the reader nod and say 'yes, this is me'\n" +
+"- Can mention Zendt softly at the end, one line max, or not at all\n" +
+"- 150-250 words. No bullet lists. Pure storytelling.\n\n" +
+"PRODUCT POST: About what Zendt is building and why it matters.\n" +
+"- Lead with the problem, not the product\n" +
+"- Mention Zendt naturally in the middle or end\n" +
+"- Include a soft download CTA at the end: zendtpayments.com\n" +
+"- 150-250 words. Conversational paragraphs.\n\n" +
+"RULES:\n" +
+"- Never start with 'I am excited' or 'I am thrilled'\n" +
+"- Never use hashtags unless specifically asked\n" +
+"- Never write a bulleted list as the main format\n" +
+"- Always sound like a real person who observed something, not a startup account posting content\n\n" +
+"YOUR PROCESS (do this internally before outputting):\n" +
+"Step 1 — Write a first draft of the post.\n" +
+"Step 2 — Audit it against these LinkedIn optimization criteria:\n" +
+"  HOOK: Does the first line stop the scroll? Is it specific, human, and curiosity-driving? Not a question opener. Not a generic statement.\n" +
+"  READABILITY: Short sentences. White space between paragraphs. Easy to skim.\n" +
+"  AUTHENTICITY: Does it sound like a real person or a content account? Remove any corporate or startup-speak.\n" +
+"  EMOTION: Does it make the reader feel something — frustration, recognition, hope?\n" +
+"  REDUNDANCY: Read every paragraph against the one before it. If two consecutive paragraphs or sentences make the same point in different words, cut one. Every sentence must earn its place. If removing it changes nothing, remove it.\n" +
+"  PUNCH: Find the single strongest line in the post. Make sure nothing after it dilutes it. If a strong line is followed by a weaker restatement, cut the restatement.\n" +
+"  CTA: Does it end with something that invites a response — a question, a reflection, or a soft action?\n" +
+"  LENGTH: 150-250 words. Not too short to be shallow, not too long to lose attention.\n" +
+"  BANNED WORDS CHECK: Remove any of these if present — excited, thrilled, game-changer, innovative, passionate, journey, inspiring, leverage, ecosystem, synergy, cutting-edge.\n" +
+"Step 3 — Rewrite and improve based on the audit. Cut ruthlessly. Every word must earn its place.\n" +
+"Step 4 — Output only the final optimized post. No audit notes, no labels, no explanation. Just the post.";
+
+
+// ─── POST GENERATOR ────────────────────────────────────────────────────────────
+const POST_HISTORY_KEY = 'zendt_post_history';
+const MAX_POST_HISTORY = 10;
+
+function getPostHistory() {
+  try { return JSON.parse(localStorage.getItem(POST_HISTORY_KEY) || '[]'); } catch { return []; }
+}
+
+function saveToPostHistory(type, topic, firstLine) {
+  const history = getPostHistory();
+  history.unshift({ type, topic, firstLine, ts: Date.now() });
+  if (history.length > MAX_POST_HISTORY) history.length = MAX_POST_HISTORY;
+  localStorage.setItem(POST_HISTORY_KEY, JSON.stringify(history));
+}
+
+async function generatePost() {
+  const type = document.getElementById('post-type').value;
+  const topic = document.getElementById('post-topic').value.trim();
+  const btn = document.getElementById('post-btn');
+  const output = document.getElementById('post-output');
+  const placeholder = document.getElementById('post-placeholder');
+  const content = document.getElementById('post-content');
+
+  const typeLabel = type === 'pain' ? 'PAIN POST' : 'PRODUCT POST';
+
+  // Build history context to avoid repetition
+  const history = getPostHistory();
+  const historyContext = history.length
+    ? '\n\nPREVIOUSLY GENERATED POSTS (do NOT repeat these angles, hooks, or opening lines):\n' +
+      history.map((h, i) => `${i+1}. [${h.type}] ${h.topic ? 'Topic: ' + h.topic + ' | ' : ''}Opening: "${h.firstLine}"`).join('\n')
+    : '';
+
+  const userMsg = `Write a ${typeLabel} for LinkedIn.${topic ? ' Angle/topic: ' + topic : ' Pick a fresh angle that would resonate with Indian freelancers working with international clients.'}${historyContext}\n\nMake sure this post has a completely different hook, opening line, and angle from any previously generated posts listed above.`;
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  output.style.display = 'none';
+  placeholder.textContent = 'Writing your post...';
+
+  try {
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_POST,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content || []).map(b => b.text || '').join('').trim();
+    const firstLine = text.split('\n')[0].slice(0, 80);
+    saveToPostHistory(typeLabel, topic, firstLine);
+    content.textContent = text;
+    output.style.display = 'block';
+    placeholder.textContent = '';
+  } catch(e) {
+    placeholder.textContent = 'Something went wrong. Try again.';
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate Post';
+  }
+}
+
+function copyPost() {
+  const text = document.getElementById('post-content').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Post', 2000);
+  });
+}
+
+// ─── AUTH ──────────────────────────────────────────────────────────────────────
+// Hardcoded users — username: password
+const USERS = {
+  'nidhish': 'zN!dhish#92',
+  'akshay':  'zAk$hay#57'
+};
+const SESSION_KEY = 'zendt_auth';
+
+function doLogin() {
+  const username = (document.getElementById('login-username')?.value || '').trim().toLowerCase();
+  const password = document.getElementById('login-input').value.trim();
+  const errEl = document.getElementById('login-error');
+  if (USERS[username] && USERS[username] === password) {
+    localStorage.setItem(SESSION_KEY, 'true');
+    localStorage.setItem('zendt_user', username);
+    document.getElementById('login-overlay').style.display = 'none';
+    errEl.textContent = '';
+    // Show username in nav if element exists
+    const userEl = document.getElementById('nav-user');
+    if (userEl) userEl.textContent = username;
+  } else {
+    errEl.textContent = 'Incorrect username or password.';
+    document.getElementById('login-input').value = '';
+    document.getElementById('login-input').focus();
+    const box = document.querySelector('.login-box');
+    box.style.transition = 'transform 0.1s';
+    box.style.transform = 'translateX(-6px)';
+    setTimeout(() => box.style.transform = 'translateX(6px)', 100);
+    setTimeout(() => box.style.transform = 'translateX(-4px)', 200);
+    setTimeout(() => box.style.transform = 'translateX(0)', 300);
+  }
+}
+
+function checkAuth() {
+  const overlay = document.getElementById('login-overlay');
+  if (localStorage.getItem(SESSION_KEY) === 'true') {
+    overlay.style.display = 'none';
+    return true;
+  } else {
+    overlay.style.display = 'flex';
+    setTimeout(() => document.getElementById('login-input').focus(), 100);
+    return false;
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function init() {
+  checkAuth();
+  updateApiStatus();
+
+  const startListener = () => {
+    if (window._fbListen) {
+      window._fbListen((data) => {
+        leads = data.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        renderLeads();
+        updateStats();
+        renderPipeline();
+        populateLeadSelect();
+        if (activeLeadId) {
+          const lead = leads.find(l => l.id === activeLeadId);
+          if (lead) renderMsgLog(lead);
+        }
+      });
+    } else {
+      // Firebase module not ready yet — retry in 500ms
+      setTimeout(startListener, 500);
+    }
+  };
+  startListener();
+}
+
+// ─── API KEY ─────────────────────────────────────────────────────────────────
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  apiKey = key;
+  localStorage.setItem('zendt_api_key', key);
+  updateApiStatus();
+}
+
+function updateApiStatus() {
+  const dot = document.getElementById('api-dot');
+  const txt = document.getElementById('api-status-text');
+  const bar = document.getElementById('setup-bar');
+  if (apiKey) {
+    dot.classList.add('connected');
+    txt.textContent = 'CONNECTED';
+    bar.style.display = 'none';
+  } else {
+    dot.classList.remove('connected');
+    txt.textContent = 'NO API KEY';
+    bar.style.display = 'flex';
+  }
+}
+
+// ─── VIEWS ────────────────────────────────────────────────────────────────────
+function switchView(v) {
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&v==='leads')||(i===1&&v==='ai')||(i===2&&v==='posts')));
+  document.getElementById('view-leads').classList.toggle('active', v==='leads');
+  document.getElementById('view-ai').classList.toggle('active', v==='ai');
+  const aiView = document.getElementById('view-ai');
+  if (aiView) aiView.style.display = v==='ai' ? 'flex' : 'none';
+  const postsView = document.getElementById('view-posts');
+  if (postsView) postsView.style.display = v==='posts' ? 'flex' : 'none';
+  if (v === 'leads') closeDetail();
+}
+
+// ─── LEADS ────────────────────────────────────────────────────────────────────
+// ─── FIRESTORE ────────────────────────────────────────────────────────────────
+async function saveLead_db(lead) {
+  try {
+    if (window._fbSave) await window._fbSave(lead);
+    else { // fallback to localStorage if Firebase not loaded
+      const idx = leads.findIndex(l => l.id === lead.id);
+      if (idx >= 0) leads[idx] = lead; else leads.unshift(lead);
+      localStorage.setItem('zendt_leads_backup', JSON.stringify(leads));
+    }
+  } catch(e) { console.error('Save error:', e); }
+}
+
+async function deleteLead_db(id) {
+  try {
+    if (window._fbDelete) await window._fbDelete(id);
+    else {
+      leads = leads.filter(l => l.id !== id);
+      localStorage.setItem('zendt_leads_backup', JSON.stringify(leads));
+    }
+  } catch(e) { console.error('Delete error:', e); }
+}
+
+function saveleadsToStorage() {
+  // no-op: Firestore is the source of truth
+  // individual save functions handle persistence
+}
+
+function getFilteredLeads() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  return leads.filter(l => {
+    const matchQ = !q || l.name.toLowerCase().includes(q) || (l.role||'').toLowerCase().includes(q) || (l.location||'').toLowerCase().includes(q);
+    let matchF = true;
+    if (currentFilter === 'all') matchF = true;
+    else if (currentFilter === 'fit-strong') matchF = l.fit === 'strong';
+    else if (currentFilter === 'fit-possible') matchF = l.fit === 'possible';
+    else if (currentFilter === 'fit-no') matchF = l.fit === 'no';
+    else matchF = l.status === currentFilter;
+    return matchQ && matchF;
+  });
+}
+
+function renderLeads() {
+  const tbody = document.getElementById('leads-tbody');
+  const empty = document.getElementById('empty-state');
+  const filtered = getFilteredLeads();
+
+  if (!leads.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const stageLabels = {0:'',1:'S1 Rapport',2:'S2 World',3:'S3 Pain',4:'S4 Pitch',5:'S5 Close'};
+  const now = Date.now();
+  const STALE_DAYS = 5;
+
+  tbody.innerHTML = filtered.map(l => {
+    const staleAlert = l.lastContacted && (now - l.lastContacted) > STALE_DAYS * 86400000 && l.status === 'messaged'
+      ? '<span class="stale-dot" title="No contact in 5+ days"></span>' : '';
+    const lastC = l.lastContacted ? relativeDate(l.lastContacted) : '<span style="color:var(--text3)">Never</span>';
+    const stageLabel = stageLabels[l.stage || 0] || '';
+    return `
+    <tr class="lead-row" onclick="openDetail('${l.id}')">
+      <td>
+        <div class="lead-name">${l.name}${staleAlert}</div>
+        <div class="lead-role">${l.role || ''}</div>
+      </td>
+      <td><span class="lead-location">${l.location || ''}</span></td>
+      <td><span class="status-badge s-${l.status}">${STATUSES.find(s=>s.v===l.status)?.l||l.status}</span></td>
+      <td><span class="fit-tag fit-${l.fit}">${l.fit==='strong'?'Strong':l.fit==='possible'?'Possible':'No fit'}</span></td>
+      <td><span style="font-family:var(--mono);font-size:10px;color:var(--blue)">${stageLabel}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text3)">${lastC}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--text3);font-family:var(--mono)">${(l.notes||'').substring(0,50)||''}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="action-btn" onclick="quickStatus('${l.id}', event)">UPDATE</button>
+      </td>
+    </tr>
+  `}).join('');
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = leads.length;
+  document.getElementById('stat-connected').textContent = leads.filter(l=>l.status==='connected').length;
+  document.getElementById('stat-messaged').textContent = leads.filter(l=>l.status==='messaged').length;
+  document.getElementById('stat-converted').textContent = leads.filter(l=>l.status==='waitlisted').length;
+  document.getElementById('fit-strong-count').textContent = leads.filter(l=>l.fit==='strong').length;
+  document.getElementById('fit-possible-count').textContent = leads.filter(l=>l.fit==='possible').length;
+  document.getElementById('fit-no-count').textContent = leads.filter(l=>l.fit==='no').length;
+}
+
+function renderPipeline() {
+  const list = document.getElementById('pipeline-list');
+  list.innerHTML = STATUSES.map(s => `
+    <div class="pipe-item" onclick="filterLeads('${s.v}')">
+      <div class="pipe-left">
+        <div class="pipe-dot" style="background:${s.c}"></div>
+        <span class="pipe-name" style="font-size:12px">${s.l}</span>
+      </div>
+      <span class="pipe-count">${leads.filter(l=>l.status===s.v).length}</span>
+    </div>
+  `).join('');
+}
+
+function relativeDate(ts) {
+  if (!ts) return 'Never';
+  const diff = Date.now() - ts;
+  const d = Math.floor(diff / 86400000);
+  if (d === 0) return 'Today';
+  if (d === 1) return 'Yesterday';
+  if (d < 7) return d + 'd ago';
+  if (d < 30) return Math.floor(d/7) + 'w ago';
+  return Math.floor(d/30) + 'mo ago';
+}
+
+function filterLeads(f) {
+  switchView('leads');
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('filter-' + f);
+  if (btn) btn.classList.add('active');
+  renderLeads();
+}
+
+function quickStatus(id, e) {
+  openDetail(id);
+}
+
+// ─── ADD MODAL ───────────────────────────────────────────────────────────────
+function openAddModal() {
+  document.getElementById('add-modal').classList.add('open');
+}
+
+function closeAddModal() {
+  document.getElementById('add-modal').classList.remove('open');
+  ['f-name','f-location','f-role','f-url','f-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+async function saveLead() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('Name is required'); return; }
+  const lead = {
+    id: Date.now().toString(),
+    name,
+    location: document.getElementById('f-location').value.trim(),
+    role: document.getElementById('f-role').value.trim(),
+    url: document.getElementById('f-url').value.trim(),
+    status: document.getElementById('f-status').value,
+    fit: document.getElementById('f-fit').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    stage: 0,
+    lastContacted: null,
+    messages: [],
+    createdAt: Date.now()
+  };
+  await saveLead_db(lead);
+  closeAddModal();
+}
+
+// ─── DETAIL PANEL ────────────────────────────────────────────────────────────
+function openDetail(id) {
+  const lead = leads.find(l => l.id === id);
+  if (!lead) return;
+  activeLeadId = id;
+
+  document.getElementById('dp-name').textContent = lead.name;
+  document.getElementById('dp-role').textContent = lead.role || '';
+  document.getElementById('dp-notes').value = lead.notes || '';
+
+  // URL link
+  const urlLink = document.getElementById('dp-url-link');
+  if (lead.url) {
+    urlLink.href = lead.url.startsWith('http') ? lead.url : 'https://' + lead.url;
+    urlLink.style.display = 'inline-flex';
+  } else {
+    urlLink.style.display = 'none';
+  }
+
+  // Status
+  const sg = document.getElementById('dp-status-group');
+  sg.innerHTML = STATUSES.map(s => `
+    <div class="status-option ${lead.status===s.v?'sel':''}" onclick="setLeadStatus('${id}','${s.v}',this)">${s.l}</div>
+  `).join('');
+
+  // Fit
+  const fg = document.getElementById('dp-fit-group');
+  fg.innerHTML = [
+    { v:'strong', l:'Strong fit' },
+    { v:'possible', l:'Possible fit' },
+    { v:'no', l:'Not a fit' }
+  ].map(f => `
+    <div class="status-option ${lead.fit===f.v?'sel':''}" onclick="setLeadFit('${id}','${f.v}',this)">${f.l}</div>
+  `).join('');
+
+  // Stage
+  const stageLabels = ['Not started','Stage 1: Rapport','Stage 2: Their world','Stage 3: Pain','Stage 4: Pitch','Stage 5: Close'];
+  const stg = document.getElementById('dp-stage-group');
+  stg.innerHTML = [0,1,2,3,4,5].map(n => `
+    <div class="stage-opt ${(lead.stage||0)===n?'sel':''}" onclick="setLeadStage('${id}',${n},this)">${n===0?'None':'S'+n}</div>
+  `).join('');
+
+  // Last contacted + follow-up alert
+  const lc = lead.lastContacted;
+  const lcLabel = document.getElementById('dp-last-contact');
+  lcLabel.textContent = lc ? relativeDate(lc) + (lc ? ' (' + new Date(lc).toLocaleDateString() + ')' : '') : 'Never';
+
+  const alertDiv = document.getElementById('dp-followup-alert');
+  const daysSince = lc ? Math.floor((Date.now() - lc) / 86400000) : null;
+  if (lead.status === 'messaged' && daysSince !== null && daysSince >= 4) {
+    alertDiv.innerHTML = `<div class="follow-up-alert">&#9888; ${daysSince} days since last contact. Time to follow up?</div>`;
+  } else {
+    alertDiv.innerHTML = '';
+  }
+
+  // Message log
+  renderMsgLog(lead);
+
+  document.getElementById('dp-msg-input').value = '';
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+  activeLeadId = null;
+}
+
+async function setLeadStatus(id, status, el) {
+  const lead = leads.find(l => l.id === id);
+  if (!lead) return;
+  lead.status = status;
+  await saveLead_db(lead);
+  el.closest('.status-select-group').querySelectorAll('.status-option').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+async function setLeadFit(id, fit, el) {
+  const lead = leads.find(l => l.id === id);
+  if (!lead) return;
+  lead.fit = fit;
+  await saveLead_db(lead);
+  el.closest('.status-select-group').querySelectorAll('.status-option').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+async function setLeadStage(id, stage, el) {
+  const lead = leads.find(l => l.id === id);
+  if (!lead) return;
+  lead.stage = stage;
+  await saveLead_db(lead);
+  el.closest('.stage-select-group').querySelectorAll('.stage-opt').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+async function markContacted() {
+  const lead = leads.find(l => l.id === activeLeadId);
+  if (!lead) return;
+  lead.lastContacted = Date.now();
+  await saveLead_db(lead);
+  document.getElementById('dp-last-contact').textContent = 'Today (' + new Date().toLocaleDateString() + ')';
+  document.getElementById('dp-followup-alert').innerHTML = '';
+}
+
+function renderMsgLog(lead) {
+  const msgs = lead.messages || [];
+  const typeColors = { sent: 'var(--green)', received: 'var(--blue)', note: 'var(--amber)' };
+  const container = document.getElementById('dp-msg-log');
+  if (!msgs.length) {
+    container.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:4px 0">No messages logged yet.</div>';
+    return;
+  }
+  container.innerHTML = msgs.map((m, i) => `
+    <div class="msg-entry">
+      <div class="msg-entry-meta">
+        <span class="msg-entry-type" style="color:${typeColors[m.type]||'var(--text3)'}">&#9654; ${m.type}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="msg-entry-date">${new Date(m.ts).toLocaleDateString()} ${new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>
+          <button class="msg-delete-btn" onclick="deleteMessage(${i})">&#10005;</button>
+        </div>
+      </div>
+      <div class="msg-entry-text">${m.text}</div>
+    </div>
+  `).reverse().join('');
+}
+
+async function logMessage() {
+  const lead = leads.find(l => l.id === activeLeadId);
+  if (!lead) return;
+  const text = document.getElementById('dp-msg-input').value.trim();
+  if (!text) return;
+  const type = document.getElementById('dp-msg-type').value;
+  if (!lead.messages) lead.messages = [];
+  lead.messages.push({ type, text, ts: Date.now() });
+  if (type === 'sent') { lead.lastContacted = Date.now(); }
+  await saveLead_db(lead);
+  document.getElementById('dp-msg-input').value = '';
+  renderMsgLog(lead);
+  if (type === 'sent') {
+    document.getElementById('dp-last-contact').textContent = 'Today (' + new Date().toLocaleDateString() + ')';
+    document.getElementById('dp-followup-alert').innerHTML = '';
+  }
+}
+
+async function deleteMessage(idx) {
+  const lead = leads.find(l => l.id === activeLeadId);
+  if (!lead || !lead.messages) return;
+  const actualIdx = lead.messages.length - 1 - idx;
+  lead.messages.splice(actualIdx, 1);
+  await saveLead_db(lead);
+  renderMsgLog(lead);
+}
+
+function exportCSV() {
+  const headers = ['Name','Role','Location','LinkedIn URL','Status','Fit','Stage','Last Contacted','Notes'];
+  const stageLabels = {0:'None',1:'S1 Rapport',2:'S2 World',3:'S3 Pain',4:'S4 Pitch',5:'S5 Close'};
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const rows = leads.map(l => [
+    l.name, l.role||'', l.location||'', l.url||'',
+    STATUSES.find(s=>s.v===l.status)?.l||l.status,
+    l.fit==='strong'?'Strong':l.fit==='possible'?'Possible':'No fit',
+    stageLabels[l.stage||0]||'',
+    l.lastContacted ? new Date(l.lastContacted).toLocaleDateString() : '',
+    l.notes||''
+  ].map(q).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'zendt-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+async function saveDetailNotes() {
+  const lead = leads.find(l => l.id === activeLeadId);
+  if (!lead) return;
+  lead.notes = document.getElementById('dp-notes').value;
+  await saveLead_db(lead);
+}
+
+function exportCSV() {
+  const headers = ['Name','Role','Location','LinkedIn URL','Status','Fit','Stage','Last Contacted','Notes'];
+  const stageLabels = {0:'None',1:'S1 Rapport',2:'S2 World',3:'S3 Pain',4:'S4 Pitch',5:'S5 Close'};
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const rows = leads.map(l => [
+    l.name, l.role||'', l.location||'', l.url||'',
+    STATUSES.find(s=>s.v===l.status)?.l||l.status,
+    l.fit==='strong'?'Strong':l.fit==='possible'?'Possible':'No fit',
+    stageLabels[l.stage||0]||'',
+    l.lastContacted ? new Date(l.lastContacted).toLocaleDateString() : '',
+    l.notes||''
+  ].map(q).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'zendt-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+async function deleteLead() {
+  if (!activeLeadId) return;
+  if (!confirm('Delete this lead?')) return;
+  await deleteLead_db(activeLeadId);
+  closeDetail();
+}
+
+function analyzeThisLead() {
+  switchView('ai');
+  switchMode('profile');
+  closeDetail();
+}
+
+function replyThisLead() {
+  const lead = leads.find(l => l.id === activeLeadId);
+  switchView('ai');
+  switchMode('convo');
+  if (lead) {
+    const stageLabels = {0:'Not started',1:'Rapport',2:'Understanding their world',3:'Finding pain',4:'Introducing Zendt',5:'Closing'};
+    const msgs = lead.messages || [];
+    const log = msgs.length ? '\n\n--- MESSAGE LOG ---\n' + msgs.map(m => `[${m.type.toUpperCase()}] ${m.text}`).join('\n\n') : '';
+    document.getElementById('ai-input').value = `Lead: ${lead.name} | ${lead.role || 'Unknown role'} | ${lead.location || ''}\nStage: ${stageLabels[lead.stage||0]}\nFit: ${lead.fit}${log}\n\n--- PASTE CONVERSATION BELOW ---\n`;
+    // Pre-select this lead in the dropdown
+    document.getElementById('lead-link-select').value = lead.id;
+  }
+  closeDetail();
+}
+
+// ─── AI ASSISTANT ─────────────────────────────────────────────────────────────
+function switchMode(m) {
+  currentMode = m;
+  document.getElementById('mode-profile').classList.toggle('active', m==='profile');
+  document.getElementById('mode-convo').classList.toggle('active', m==='convo');
+  document.getElementById('mode-hint').textContent = m==='profile'
+    ? 'Paste a LinkedIn profile to get fit assessment, connection note, and first DM'
+    : 'Paste the full conversation thread to get the next best reply';
+  document.getElementById('run-btn').textContent = m==='profile' ? 'Run Analysis' : 'Suggest Reply';
+  const textarea = document.getElementById('ai-input');
+  textarea.value = '';
+  textarea.placeholder = m==='profile'
+    ? 'Paste LinkedIn profile text here...'
+    : 'Paste the full conversation thread here...';
+  document.getElementById('ai-output').innerHTML = '<div class="placeholder-msg">Paste a ' + (m==='profile' ? 'profile' : 'conversation') + ' on the left<br>and hit ' + (m==='profile' ? 'Run Analysis' : 'Suggest Reply') + ' to get started.</div>';
+}
+
+function populateLeadSelect() {
+  const sel = document.getElementById('lead-link-select');
+  sel.innerHTML = '<option value="">-- save notes to lead --</option>' +
+    leads.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+}
+
+async function runAI() {
+  const input = document.getElementById('ai-input').value.trim();
+  if (!input) return;
+
+  const out = document.getElementById('ai-output');
+  out.innerHTML = '<div class="loading-indicator"><div class="loading-dots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div><span>' + (currentMode==='profile' ? 'Analyzing profile...' : 'Reading conversation...') + '</span></div>';
+
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+
+  try {
+    const system = currentMode === 'profile' ? SYSTEM_PROFILE : SYSTEM_CONVO;
+    const userMsg = currentMode === 'profile'
+      ? 'Here is the LinkedIn profile:\n\n' + input
+      : 'Here is the LinkedIn conversation:\n\n' + input;
+
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error.message);
+
+    const text = data.content?.map(b => b.text||'').join('').trim() || '';
+
+    if (currentMode === 'profile') {
+      renderProfileOutput(text);
+    } else {
+      renderConvoOutput(text);
+    }
+
+    // Clear input after successful analysis
+    document.getElementById('ai-input').value = '';
+
+    // Save notes to lead if selected
+    const leadSel = document.getElementById('lead-link-select').value;
+    if (leadSel) {
+      const lead = leads.find(l => l.id === leadSel);
+      if (lead) {
+        const existing = lead.notes || '';
+        const timestamp = new Date().toLocaleDateString();
+        lead.notes = existing + (existing ? '\n\n' : '') + `[AI ${currentMode==='profile'?'Profile Analysis':'Convo Reply'} - ${timestamp}]\n` + text.substring(0, 300) + '...';
+        await saveLead_db(lead);
+      }
+    }
+
+  } catch(e) {
+    out.innerHTML = `<div style="color:var(--red);font-family:var(--mono);font-size:12px;padding:20px 0">Error: ${e.message}<br><br>Check your API key and try again.</div>`;
+  }
+
+  btn.disabled = false;
+}
+
+function renderProfileOutput(text) {
+  const name     = text.match(/NAME:\s*(.+)/)?.[1]?.trim() || '';
+  const role     = text.match(/ROLE:\s*(.+)/)?.[1]?.trim() || '';
+  const location = text.match(/LOCATION:\s*(.+)/)?.[1]?.trim() || '';
+  const fit      = text.match(/FIT:\s*(.+)/)?.[1]?.trim() || '';
+  const read     = text.match(/PROFILE_READ:\s*([\s\S]+?)(?=CONNECTION_NOTE:)/)?.[1]?.trim() || '';
+  const note     = text.match(/CONNECTION_NOTE:\s*([\s\S]+?)(?=FIRST_DM:)/)?.[1]?.trim() || '';
+  const dm       = text.match(/FIRST_DM:\s*([\s\S]+)/)?.[1]?.trim() || '';
+  const noteLen  = note.length;
+  const isGoodFit = fit.includes('Strong') || fit.includes('Possible');
+  const fitKey   = fit.includes('Strong') ? 'strong' : fit.includes('Possible') ? 'possible' : 'no';
+
+  // Store parsed data for quick-add
+  window._lastParsedLead = { name, role, location, fit: fitKey, note: read };
+
+  const alreadyExists = name && leads.some(l => l.name.toLowerCase() === name.toLowerCase());
+
+  // AUTO-ADD immediately if good fit
+  if (isGoodFit && name && !alreadyExists) {
+    addLeadFromProfile();
+  }
+
+  const bannerHtml = isGoodFit && name ? `
+    <div class="add-lead-banner already" style="cursor:default">
+      <span>&#10003; ${alreadyExists ? name + ' already in leads' : name + ' added to leads'}</span>
+      <span class="fit-tag fit-${fitKey}" style="margin-left:8px">${fit}</span>
+    </div>` : (name ? `
+    <div class="add-lead-banner already" style="cursor:default;opacity:0.5">
+      <span>Not a fit — not added to leads</span>
+    </div>` : '');
+
+  const out = document.getElementById('ai-output');
+  out.innerHTML = `
+    ${bannerHtml}
+
+    <div class="out-block">
+      <div class="out-block-header">
+        <span class="out-block-title">Profile Read</span>
+        <span class="fit-tag fit-${fitKey}">${fit}</span>
+      </div>
+      <div class="out-block-body">${read}</div>
+    </div>
+
+    <div class="out-block">
+      <div class="out-block-header">
+        <span class="out-block-title">Connection Note</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="${noteLen>280?'char-warn':'char-count'}">${noteLen}/300</span>
+          <button class="copy-btn" onclick="copyText('note-out')">COPY</button>
+        </div>
+      </div>
+      <div class="out-block-body highlight" id="note-out">${note}</div>
+    </div>
+
+    <div class="out-block">
+      <div class="out-block-header">
+        <span class="out-block-title">First DM (send after they accept)</span>
+        <button class="copy-btn" onclick="copyText('dm-out')">COPY</button>
+      </div>
+      <div class="out-block-body highlight" id="dm-out">${dm}</div>
+    </div>
+  `;
+}
+
+async function addLeadFromProfile() {
+  const p = window._lastParsedLead;
+  if (!p || !p.name) return;
+  if (leads.some(l => l.name.toLowerCase() === p.name.toLowerCase())) return;
+
+  const lead = {
+    id: Date.now().toString(),
+    name: p.name,
+    role: p.role || '',
+    location: p.location || '',
+    url: '',
+    status: 'prospect',
+    fit: p.fit || 'possible',
+    notes: p.note || '',
+    stage: 0,
+    lastContacted: null,
+    messages: [],
+    createdAt: Date.now()
+  };
+  await saveLead_db(lead);
+
+  // Update the banner to show added state
+  const banner = document.querySelector('.add-lead-banner');
+  if (banner) {
+    banner.classList.add('already');
+    banner.innerHTML = `<span>&#10003; ${p.name} added to leads</span>`;
+    banner.onclick = null;
+  }
+}
+
+function renderConvoOutput(text) {
+  const status = text.match(/STATUS:\s*(.+?)(?:\n|STAGE:)/s)?.[1]?.trim() || '';
+  const stage = text.match(/STAGE:\s*(\d)/)?.[1] || '';
+  const reply = text.match(/REPLY:\s*([\s\S]+)/)?.[1]?.trim() || text;
+  const stageLabels = {'1':'Rapport','2':'Understanding world','3':'Finding pain','4':'Introducing Zendt','5':'Closing'};
+
+  const out = document.getElementById('ai-output');
+  out.innerHTML = `
+    <div class="out-block">
+      <div class="out-block-header">
+        <span class="out-block-title">Conversation Status</span>
+        ${stage ? `<span class="stage-indicator">Stage ${stage}: ${stageLabels[stage]||''}</span>` : ''}
+      </div>
+      <div class="out-block-body">${status}</div>
+    </div>
+
+    <div class="out-block">
+      <div class="out-block-header">
+        <span class="out-block-title">Suggested Reply</span>
+        <button class="copy-btn" onclick="copyText('reply-out')">COPY</button>
+      </div>
+      <div class="out-block-body highlight" id="reply-out">${reply}</div>
+    </div>
+  `;
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      const btn = el.closest('.out-block').querySelector('.copy-btn');
+      if (btn) { btn.textContent = 'COPIED'; setTimeout(() => btn.textContent = 'COPY', 1500); }
+    }).catch(() => {});
+  }
+}
+
+// ─── EXPOSE TO HTML (required for type="module") ──────────────────────────────
+window.switchView = switchView;
+window.switchMode = switchMode;
+window.filterLeads = filterLeads;
+window.openAddModal = openAddModal;
+window.closeAddModal = closeAddModal;
+window.saveLead = saveLead;
+window.openDetail = openDetail;
+window.closeDetail = closeDetail;
+window.setLeadStatus = setLeadStatus;
+window.setLeadFit = setLeadFit;
+window.setLeadStage = setLeadStage;
+window.markContacted = markContacted;
+window.logMessage = logMessage;
+window.deleteMessage = deleteMessage;
+window.saveDetailNotes = saveDetailNotes;
+window.deleteLead = deleteLead;
+window.analyzeThisLead = analyzeThisLead;
+window.replyThisLead = replyThisLead;
+window.addLeadFromProfile = addLeadFromProfile;
+window.runAI = runAI;
+window.copyText = copyText;
+window.exportCSV = exportCSV;
+window.quickStatus = quickStatus;
+window.saveApiKey = saveApiKey;
+window.doLogin = doLogin;
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('login-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+const unEl = document.getElementById('login-username');
+if (unEl) unEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-input').focus();
+});
+
+// Event delegation for dynamically rendered buttons in AI output
+document.getElementById('ai-output').addEventListener('click', function(e) {
+  const banner = e.target.closest('[data-action="addLead"]');
+  if (banner) { addLeadFromProfile(); return; }
+});
+
+init();
+</script>
+</body>
+</html>
+
